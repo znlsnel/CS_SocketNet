@@ -58,7 +58,7 @@ namespace ServerCore
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
 			_listener.Init(endPoint, OnAcceptHandler);
-			int debugTick = 0;
+
 			while (true)
 			{
 				;

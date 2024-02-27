@@ -34,8 +34,7 @@ namespace ServerCore
 			if (pending == false) // 비동긴데 동기마냥 연결된 경우
 				OnAcceptCompleted(null, args); 
 		}
-                  
-            
+                   
         
 		void OnAcceptCompleted(object sender, SocketAsyncEventArgs args)
 		{

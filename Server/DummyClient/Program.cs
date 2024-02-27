@@ -9,7 +9,32 @@ using System.Threading.Tasks;
 namespace DummyClient
 {
 	class Program
-	{ 
+	{
+		static ServerConnector _connector = new ServerConnector();
+		static int _dummyID = 0;
+		static void OnAcceptHandler(Socket serverSocket)
+		{
+			try 
+			{
+				//Console.WriteLine($"Connected To {socket.RemoteEndPoint.ToString()}");
+
+				// 서버로 보내기
+				byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello Server! this is Client[{_dummyID++}]!");
+				int sendBytes = serverSocket.Send(sendBuffer);
+
+				// 서버에게 받기
+				byte[] recvBuff = new byte[1024];
+				int recvBuffers = serverSocket.Receive(recvBuff);
+				string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBuffers);
+				Console.WriteLine($"[From Server] {recvData}"); 
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.ToString());
+			}
+
+		}
+
 		static void Main(string[] args)
 		{
 			 Console.WriteLine("===========Im Client===============");
@@ -23,32 +48,10 @@ namespace DummyClient
 			 
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
-			int dummyID = 0;
 			while (true)
 			{
-				Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-				 
-				try
-				{
-					socket.Connect(endPoint);
-					//Console.WriteLine($"Connected To {socket.RemoteEndPoint.ToString()}");
-
-					// 서버로 보내기
-					byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello Server! this is Client[{dummyID++}]!");
-					int sendBytes = socket.Send(sendBuffer);
-					 
-					// 서버에게 받기
-					byte[] recvBuff = new byte[1024];
-					int recvBuffers = socket.Receive(recvBuff);
-					string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBuffers);
-					Console.WriteLine($"[From Server] {recvData}");
-
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.ToString());
-				}
-
+				_connector.Init(endPoint, OnAcceptHandler);
+				   
 				Thread.Sleep(100); 
 			}
 
