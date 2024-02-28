@@ -1,48 +1,45 @@
-﻿using System;
-using static System.Collections.Specialized.BitVector32;
+﻿using System.Net.Sockets;
 using System.Net;
 using System.Text;
-using System.Threading;
-
 using ServerCore;
-  
-namespace Server
+
+namespace MainServer
 {
-	class GameSession : Session
+	public class GameSession : Session
 	{
-		int count = 0;
 		public override void OnConnected(EndPoint endPoint)
 		{
-			// client에게 보낸다 
-			byte[] sendBuff = Encoding.UTF8.GetBytes($"hello client! this is server{count++}!");
+			Console.WriteLine($"OnConnected : {endPoint}");
+			byte[] sendBuff = Encoding.UTF8.GetBytes("Hello Client! this is Server!");
 			Send(sendBuff);
-
-			Thread.Sleep(100);
+			 
+			Thread.Sleep(100); 
 			Disconnect();
-		}
+
+        }
 
 		public override void OnDisconnected(EndPoint endPoint)
 		{
-			Console.WriteLine($" OnDisconnected :  {endPoint}");
+			Console.WriteLine($"OnDisConnected : {endPoint}");
 
 		}
 
 		public override void OnRecv(ArraySegment<byte> buffer)
-		{
+		{  
 			string recvData = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
 			Console.WriteLine($"[From Client] {recvData}");
-		}
-
+        }
+		 
 		public override void OnSend(int numOfBytes)
 		{
-			Console.WriteLine($" Transferred bytes :  {numOfBytes}");
-
+		//	throw new NotImplementedException();
 		}
 	}
-
 	class Program
 	{
 		static Listener _listener = new Listener();
+		static int count = 0;
+		 
 
 		static void Main(string[] args)
 		{
@@ -60,7 +57,7 @@ namespace Server
 			IPAddress ipAddr = IPAddress.Parse(IpAddress);
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
-			_listener.Init(endPoint, () => { return new GameSession(); });
+			_listener.Init(endPoint, () =>{ return new GameSession(); });
 
 			while (true)
 			{

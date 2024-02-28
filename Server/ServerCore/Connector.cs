@@ -6,18 +6,18 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DummyClient
-{ 
-	class ServerConnector
+namespace ServerCore
+{
+	public class Connector
 	{
 
-		//Func<Sesson> _sessionFactory; 
-		public void Connect(IPEndPoint endPoint, Action<Socket> onAcceptHandler)
+		Func<Session> _sessionFactory;
+		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory)
 		{
-			//_onAcceptHandler += onAcceptHandler;
-
-			Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+			_sessionFactory += sessionFactory;
 			 
+			Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
 			SocketAsyncEventArgs args = new SocketAsyncEventArgs();
 			args.Completed += new EventHandler<SocketAsyncEventArgs>(OnConnectCompleted);
 			args.RemoteEndPoint = endPoint;
@@ -25,7 +25,7 @@ namespace DummyClient
 
 			RegisterConnect(args);
 		}
-		 
+
 		void RegisterConnect(SocketAsyncEventArgs args)
 		{
 			Socket socket = args.UserToken as Socket;
@@ -35,19 +35,21 @@ namespace DummyClient
 			bool pending = socket.ConnectAsync(args);
 			if (pending == false)
 				OnConnectCompleted(null, args);
-			 
+
 		}
 
 		void OnConnectCompleted(Object sender, SocketAsyncEventArgs args)
 		{
 			if (args.SocketError == SocketError.Success)
 			{
-				//_onAcceptHandler.Invoke(args.ConnectSocket);
-			}
-			else
+				Session session = _sessionFactory.Invoke();
+				session.Start(args.ConnectSocket);
+				session.OnConnected(args.RemoteEndPoint); 
+			} 
+			else 
 			{
 				Console.WriteLine($"OnConnectedCompleted Fail: {args.SocketError.ToString()}");
-			} 
+			}
 		}
 
 	}

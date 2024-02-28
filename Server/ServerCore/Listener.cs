@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace ServerCore
 {
-	class Listener
+	public class Listener 
 	{ 
 		Socket _listenSocket;
-		Action<Socket> _onAcceptHandler;
+		Func<Session> _seesionFactory; 
 
-		public void Init(IPEndPoint endPoint, Action<Socket> onAcceptHandler)
-		{ 
-			_onAcceptHandler += onAcceptHandler; 
+		public void Init(IPEndPoint endPoint, Func<Session> seesionFactory) 
+		{
+			_seesionFactory += seesionFactory;  
 
 			_listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 			_listenSocket.Bind(endPoint);
@@ -40,7 +40,9 @@ namespace ServerCore
 		{
 			if (args.SocketError == SocketError.Success)
 			{
-				_onAcceptHandler.Invoke(args.AcceptSocket);
+				Session session = _seesionFactory.Invoke();
+				session.Start(args.AcceptSocket);
+				session.OnConnected(args.AcceptSocket.RemoteEndPoint);
 			}  
 			else
 			{

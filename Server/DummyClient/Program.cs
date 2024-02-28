@@ -4,14 +4,43 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
+using ServerCore;
  
 namespace DummyClient
 {
+
+	public class GameSession : Session
+	{
+		static int _dummyID = 0;
+		public override void OnConnected(EndPoint endPoint)
+		{
+			Console.WriteLine($"OnConnected : {endPoint}");
+			byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello Server! this is Client[{_dummyID++}]!");
+			Send(sendBuffer);
+
+		}
+
+		public override void OnDisconnected(EndPoint endPoint)
+		{
+			Console.WriteLine($"OnDisConnected : {endPoint}");
+
+		}
+
+		public override void OnRecv(ArraySegment<byte> buffer)
+		{
+			string recvData = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
+			Console.WriteLine($"[From Server] {recvData}");
+		}
+
+		public override void OnSend(int numOfBytes)
+		{
+			//	throw new NotImplementedException();
+		}
+	}
+
 	class Program
 	{
 		static ServerConnector _connector = new ServerConnector();
-		static int _dummyID = 0;
 		static void OnConnectCompleted(Socket serverSocket)
 		{ 
 			try  
@@ -20,8 +49,8 @@ namespace DummyClient
 				session.Start(serverSocket);
 
 				// 서버로 보내기
-				byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello Server! this is Client[{_dummyID++}]!");
-				session.Send(sendBuffer);  
+				//byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello Server! this is Client[{_dummyID++}]!");
+				//session.Send(sendBuffer);  
 				//serverSocket.SendA
 			}
 			catch (Exception ex)
@@ -33,7 +62,7 @@ namespace DummyClient
 		}
 
 		static void Main(string[] args)
-		{
+		{ 
 			 Console.WriteLine("===========Im Client===============");
 			string host = Dns.GetHostName();
 			IPHostEntry ipHost = Dns.GetHostEntry(host);
@@ -44,33 +73,17 @@ namespace DummyClient
 			IPAddress ipAddr = IPAddress.Parse(Ip6Address);
 			 
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
-			 
-			   
+
+			Connector connector = new Connector();
+			connector.Connect(endPoint, () => { return new GameSession(); });   
+
 			while (true)
 			{
-				//_connector.Init(endPoint, OnConnectCompleted);
-				try 
-				{ 
-					Socket serverSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-					serverSocket.Connect(endPoint);
-
-					byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello Server! this is Client[{_dummyID++}]!");
-					serverSocket.Send(sendBuffer);
-
-					byte[] recvBuff = new byte[1024];
-					int recvBytes = serverSocket.Receive(recvBuff);
-					string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
-
-					Console.WriteLine($"[From Server] {recvData}");
-				}
-				catch (Exception ex)
-				{ 
-					Console.WriteLine(ex.ToString());
-				}
-
-				Thread.Sleep(1); 
+				connector.Connect(endPoint, () => { return new GameSession(); });
+			Thread.Sleep(100);
+				;
 			}
 
         }
 	}
-}
+} 

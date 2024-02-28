@@ -52,7 +52,7 @@ namespace DummyClient
 		{
 			bool pending = _socket.SendAsync(args);
 			if (pending == false)
-			{
+			{ 
 				OnSendCompleted(null, args);
 			}
 		}

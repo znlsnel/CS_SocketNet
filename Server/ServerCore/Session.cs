@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ServerCore
-{
-	class Session
+{  
+
+
+	public abstract class Session
 	{
 		Socket _socket;
 		int _disconnected = 0;
@@ -18,9 +21,14 @@ namespace ServerCore
 		List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
 		SocketAsyncEventArgs _sendArgs = new SocketAsyncEventArgs();
 		SocketAsyncEventArgs _recvArgs = new SocketAsyncEventArgs();
-
+		 
+		public abstract void OnConnected(EndPoint endPoint);
+		public abstract void OnRecv(ArraySegment<byte> buffer)	;
+		public abstract void OnSend(int numOfBytes); 
+		public abstract void OnDisconnected(EndPoint endPoint);
+		 
 		public void Start (Socket socket)
-		{
+		{ 
 			_socket = socket;
 
 			_recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
@@ -46,8 +54,9 @@ namespace ServerCore
 		public void Disconnect()
 		{
 			if (Interlocked.Exchange(ref _disconnected, 1) == 1)
-				return; 
+				return;
 
+			OnDisconnected(_socket.RemoteEndPoint);
 			_socket.Shutdown(SocketShutdown.Both);
 			_socket.Close();
 		}
@@ -78,7 +87,7 @@ namespace ServerCore
 			{
 				OnSendCompleted(null, _sendArgs);
 			} 
-		}
+		} 
 		void OnSendCompleted(object sender, SocketAsyncEventArgs args)
 		{
 			lock ( _lock)
@@ -90,10 +99,10 @@ namespace ServerCore
 						_sendArgs.BufferList = null;
 						_pendingList.Clear();
 
+						OnSend(_sendArgs.BytesTransferred);
+
 						if (_sendQueue.Count > 0)
 							RegisterSend();
-						else
-							_pending = false;
 					}
 					catch (Exception ex)
 					{
@@ -110,9 +119,7 @@ namespace ServerCore
 			{
 				try
 				{
-					string recvData = Encoding.UTF8.GetString(args.Buffer, args.Offset, args.BytesTransferred);
-					Console.WriteLine($"[From Client] {recvData}");
-
+					OnRecv(new ArraySegment<byte>(args.Buffer, args.Offset, args.BytesTransferred));
 					RegisterRecv(); 
 				}
 				catch (Exception e)
