@@ -49,18 +49,26 @@ namespace DummyClient
 			while (true)
 			{
 				//_connector.Init(endPoint, OnConnectCompleted);
-				Socket serverSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-				serverSocket.Connect(endPoint);
+				try 
+				{ 
+					Socket serverSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+					serverSocket.Connect(endPoint);
 
-				byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello Server! this is Client[{_dummyID++}]!");
-				serverSocket.Send(sendBuffer);
+					byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello Server! this is Client[{_dummyID++}]!");
+					serverSocket.Send(sendBuffer);
 
-				byte[] recvBuff = new byte[1024]; 
-				int recvBytes = serverSocket.Receive(recvBuff);
-				string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
+					byte[] recvBuff = new byte[1024];
+					int recvBytes = serverSocket.Receive(recvBuff);
+					string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
 
-				Console.WriteLine($"[From Server] {recvData}");
-				Thread.Sleep(100); 
+					Console.WriteLine($"[From Server] {recvData}");
+				}
+				catch (Exception ex)
+				{ 
+					Console.WriteLine(ex.ToString());
+				}
+
+				Thread.Sleep(1); 
 			}
 
         }
