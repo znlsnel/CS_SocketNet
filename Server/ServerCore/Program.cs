@@ -13,29 +13,27 @@ namespace ServerCore
 	class Program
 	{
 		static Listener _listener = new Listener();
+		static int count = 0;
 		static void OnAcceptHandler(Socket clientSocket)
 		{
 
 			try
 			{
-				byte[] recvBuff = new byte[1024];
-				int recvBytes = clientSocket.Receive(recvBuff); // recvBuff의 크기를 반환
-				string recvData = Encoding.UTF8.GetString(recvBuff, 0, recvBytes);
-				Console.WriteLine($"[From Client] {recvData}");
-
-				// client에게 보낸다
-				byte[] sendBuff = Encoding.UTF8.GetBytes("hello client! this is server!");
-				clientSocket.Send(sendBuff);
-
-				// Client와의 연결을 끊기
-				clientSocket.Shutdown(SocketShutdown.Both);
-				clientSocket.Close();
-
+				Session session = new Session(); 
+				session.Start(clientSocket);
+				 
+				// client에게 보낸다 
+				byte[] sendBuff = Encoding.UTF8.GetBytes($"hello client! this is server{count++}!");
+				session.Send(sendBuff);
+				 
+				//Thread.Sleep(10);
+				session.Disconnect();
 				
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.ToString());
+				//Console.WriteLine(ex.ToString());
+				Console.Write("o ");
 			}
 
 
@@ -63,6 +61,7 @@ namespace ServerCore
 			{
 				;
 			}
+
 		}
 
 	}

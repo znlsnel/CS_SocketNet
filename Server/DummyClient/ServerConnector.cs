@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DummyClient
-{
+{ 
 	class ServerConnector
 	{
 		Socket _serverSocket;
@@ -17,22 +17,21 @@ namespace DummyClient
 			_onAcceptHandler += onAcceptHandler;
 
 			_serverSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-
+			 
 			SocketAsyncEventArgs args = new SocketAsyncEventArgs();
 			args.RemoteEndPoint = endPoint;
-			args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
+			args.Completed += new EventHandler<SocketAsyncEventArgs>(OnConnectCompleted);
 			_serverSocket.ConnectAsync(args);
 		}
-
-
-		void OnAcceptCompleted(Object sender, SocketAsyncEventArgs args)
-		{
+		 
+		 
+		void OnConnectCompleted(Object sender, SocketAsyncEventArgs args)
+		{ 
 			if (args.SocketError == SocketError.Success)
-				_onAcceptHandler.Invoke(args.ConnectSocket);
+				_onAcceptHandler.Invoke(args.ConnectSocket); 
 			else
 			{
 				Console.WriteLine(args.SocketError.ToString());
-				_serverSocket.ConnectAsync(args);
 			}
 		}
 
