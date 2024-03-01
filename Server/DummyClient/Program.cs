@@ -80,7 +80,7 @@ namespace DummyClient
 			connector.Connect(endPoint, () => { return new GameSession(); });   
 
 			      
-			while (true)
+			while (true) 
 			{
 				connector.Connect(endPoint, () => { return new GameSession(); });
 				Thread.Sleep(100);
@@ -94,6 +94,8 @@ namespace DummyClient
 
 				//Session session = connector.GetSession();
 				//session.Send(chatData);
+
+			
 			} 
 		}
 	}
