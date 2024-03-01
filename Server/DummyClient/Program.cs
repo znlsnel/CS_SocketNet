@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ServerCore;
- 
+  
 namespace DummyClient
-{
-
+{  
 	public class GameSession : Session
 	{
 		static int _dummyID = 0;
 		public override void OnConnected(EndPoint endPoint)
-		{
+		{ 
 			Console.WriteLine($"OnConnected : {endPoint}");
 			byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello Server! this is Client[{_dummyID++}]!");
 			Send(sendBuffer);
+
 
 		}
 
@@ -26,10 +26,12 @@ namespace DummyClient
 
 		}
 
-		public override void OnRecv(ArraySegment<byte> buffer)
+		public override int OnRecv(ArraySegment<byte> buffer)
 		{
 			string recvData = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
 			Console.WriteLine($"[From Server] {recvData}");
+			 
+			return buffer.Count;
 		}
 
 		public override void OnSend(int numOfBytes)
@@ -60,7 +62,7 @@ namespace DummyClient
 			} 
 
 		}
-
+		
 		static void Main(string[] args)
 		{ 
 			 Console.WriteLine("===========Im Client===============");
@@ -71,19 +73,28 @@ namespace DummyClient
 			  
 			//	IPAddress ipAddr = ipHost.AddressList[0];
 			IPAddress ipAddr = IPAddress.Parse(Ip6Address);
-			 
+			  
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
-
+			 
 			Connector connector = new Connector();
 			connector.Connect(endPoint, () => { return new GameSession(); });   
 
+			      
 			while (true)
 			{
 				connector.Connect(endPoint, () => { return new GameSession(); });
-			Thread.Sleep(100);
-				;
-			}
+				Thread.Sleep(100);
+				//string chatString = Console.ReadLine();
+				//byte[] chatData = Encoding.UTF8.GetBytes(chatString);
+				//Console.SetCursorPosition(0, Console.CursorTop - 1);
 
-        }
+				//// 현재 줄에 공백을 출력하여 내용을 지웁니다.
+				//Console.Write(new string(' ', Console.WindowWidth));
+				//Console.SetCursorPosition(0, Console.CursorTop);
+
+				//Session session = connector.GetSession();
+				//session.Send(chatData);
+			} 
+		}
 	}
 } 

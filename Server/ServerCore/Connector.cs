@@ -12,6 +12,7 @@ namespace ServerCore
 	{
 
 		Func<Session> _sessionFactory;
+		private Session _currentSession;
 		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory)
 		{
 			_sessionFactory += sessionFactory;
@@ -25,6 +26,14 @@ namespace ServerCore
 
 			RegisterConnect(args);
 		}
+
+		public Session GetSession() 
+		{
+			if (_currentSession == null)
+				_currentSession = _sessionFactory.Invoke();
+			 
+			return _currentSession;
+		} 
 
 		void RegisterConnect(SocketAsyncEventArgs args)
 		{
@@ -42,9 +51,10 @@ namespace ServerCore
 		{
 			if (args.SocketError == SocketError.Success)
 			{
-				Session session = _sessionFactory.Invoke();
+				Session session = _sessionFactory.Invoke(); 
 				session.Start(args.ConnectSocket);
 				session.OnConnected(args.RemoteEndPoint); 
+				_currentSession = session;
 			} 
 			else 
 			{

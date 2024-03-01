@@ -7,16 +7,17 @@ namespace MainServer
 {
 	public class GameSession : Session
 	{
+		static int serverCount = 0;
 		public override void OnConnected(EndPoint endPoint)
 		{
 			Console.WriteLine($"OnConnected : {endPoint}");
-			byte[] sendBuff = Encoding.UTF8.GetBytes("Hello Client! this is Server!");
+			byte[] sendBuff = Encoding.UTF8.GetBytes($"Hello Client! this is Server[{serverCount++}]!");
 			Send(sendBuff);
-			 
-			Thread.Sleep(100); 
+
+			Thread.Sleep(100);
 			Disconnect();
 
-        }
+		}
 
 		public override void OnDisconnected(EndPoint endPoint)
 		{
@@ -24,12 +25,13 @@ namespace MainServer
 
 		}
 
-		public override void OnRecv(ArraySegment<byte> buffer)
+		public override int OnRecv(ArraySegment<byte> buffer)
 		{  
 			string recvData = Encoding.UTF8.GetString(buffer.Array, buffer.Offset, buffer.Count);
 			Console.WriteLine($"[From Client] {recvData}");
-        }
-		 
+			return buffer.Count;
+		}
+
 		public override void OnSend(int numOfBytes)
 		{
 		//	throw new NotImplementedException();

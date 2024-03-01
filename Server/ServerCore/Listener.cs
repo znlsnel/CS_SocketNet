@@ -11,11 +11,11 @@ namespace ServerCore
 	public class Listener 
 	{ 
 		Socket _listenSocket;
-		Func<Session> _seesionFactory; 
+		Func<Session> _sessionFactory; 
 
 		public void Init(IPEndPoint endPoint, Func<Session> seesionFactory) 
 		{
-			_seesionFactory += seesionFactory;  
+			_sessionFactory += seesionFactory;  
 
 			_listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 			_listenSocket.Bind(endPoint);
@@ -25,7 +25,9 @@ namespace ServerCore
 			args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
 			RegisterAccept(args);
 		}  
-		  
+		
+		public Session GetSession() { return _sessionFactory.Invoke(); }
+
 		void RegisterAccept(SocketAsyncEventArgs args)
 		{
 			args.AcceptSocket = null;
@@ -40,7 +42,7 @@ namespace ServerCore
 		{
 			if (args.SocketError == SocketError.Success)
 			{
-				Session session = _seesionFactory.Invoke();
+				Session session = _sessionFactory.Invoke();
 				session.Start(args.AcceptSocket);
 				session.OnConnected(args.AcceptSocket.RemoteEndPoint);
 			}  
