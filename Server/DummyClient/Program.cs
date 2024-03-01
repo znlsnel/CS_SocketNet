@@ -7,17 +7,41 @@ using System.Threading.Tasks;
 using ServerCore;
   
 namespace DummyClient
-{  
+{
+	public class Packet
+	{
+		public ushort _size = 12;
+		public ushort _packetId = 0;
+		public string _name = "";
+
+		public Packet(ushort size, ushort id, string name )
+		{
+			_packetId = id;
+			_size = size;
+			_name = name;
+		}
+
+	}
+
 	public class GameSession : Session
 	{
 		static int _dummyID = 0;
 		public override void OnConnected(EndPoint endPoint)
 		{ 
 			Console.WriteLine($"OnConnected : {endPoint}");
-			byte[] sendBuffer = Encoding.UTF8.GetBytes($"Hello Server! this is Client[{_dummyID++}]!");
-			Send(sendBuffer);
-
-
+			 
+			Packet msg = new Packet(10, 23, "김우디");
+			ArraySegment<byte> openSegment = SendBufferHelper.Open(4096);
+			byte[] buffer = BitConverter.GetBytes(msg._size);
+			byte[] buffer2 = BitConverter.GetBytes(msg._packetId);
+			byte[] buffer3 = Encoding.UTF8.GetBytes(msg._name);
+			 
+			Array.Copy(buffer, 0, openSegment.Array, openSegment.Offset, buffer.Length);
+			Array.Copy(buffer2, 0, openSegment.Array, openSegment.Offset + buffer.Length, buffer2.Length);
+			Array.Copy(buffer3, 0, openSegment.Array, openSegment.Offset + buffer.Length + buffer2.Length, buffer3.Length);
+			ArraySegment<byte> sendBuff = SendBufferHelper.close(msg._size);
+			 
+			Send(sendBuff);
 		}
 
 		public override void OnDisconnected(EndPoint endPoint)
