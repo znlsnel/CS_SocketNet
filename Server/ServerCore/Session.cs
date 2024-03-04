@@ -7,7 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ServerCore
-{  
+{
+
+
 	public abstract class PacketSession : Session
 	{
 		public static readonly int HeaderSize = 2;
@@ -16,7 +18,7 @@ namespace ServerCore
 		{
 			int processLen = 0;
 			  
-			while (true)
+			while (true) 
 			{
 				// 최소한 헤더는 파싱할 수 있는지 체크!
 				if (buffer.Count < HeaderSize)
@@ -34,7 +36,7 @@ namespace ServerCore
 				processLen += dataSize;
 				buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
 			}
-			return 0; 
+			return processLen;   
 		}
 
 		public abstract void OnRecvPacket(ArraySegment<byte> buffer);
@@ -71,22 +73,13 @@ namespace ServerCore
 			RegisterRecv();
 		}
 
-		public void Start()
-		{
-
-
-			_recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
-			_recvArgs.SetBuffer(new byte[1024], 0, 1024);
-
-			_sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
-			RegisterRecv();
-		}
 
 		public void Send(ArraySegment<byte> data)
 		{
 			lock (_lock)
 			{
-				_sendQueue.Enqueue(data);
+				_sendQueue.Enqueue(data); 
+				if (_pendingList.Count == 0)
 					RegisterSend();
 				
                 
@@ -95,6 +88,7 @@ namespace ServerCore
 		
 		public void Disconnect()
 		{
+
 			if (Interlocked.Exchange(ref _disconnected, 1) == 1)
 				return;
 
@@ -109,8 +103,7 @@ namespace ServerCore
 			_recvBuffer.Clean();
 			ArraySegment<byte> segment = _recvBuffer.WriteSegment;
 			_recvArgs.SetBuffer(segment.Array, segment.Offset, segment.Count);
-
-
+			
 			bool pending = _socket.ReceiveAsync(_recvArgs);
 			if (pending == false)
 			{
@@ -127,7 +120,8 @@ namespace ServerCore
 				ArraySegment<byte> buff = _sendQueue.Dequeue();
 				_pendingList.Add(buff);
 			} 
-			_sendArgs.BufferList = _pendingList; 
+			_sendArgs.BufferList = _pendingList;
+
 
 			bool pending = _socket.SendAsync(_sendArgs);
 			if (pending == false)
@@ -137,12 +131,12 @@ namespace ServerCore
 		}  
 		void OnSendCompleted(object sender, SocketAsyncEventArgs args)
 		{
-			lock ( _lock)
+			lock (_lock)
 			{
 				if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success)
 				{
 					try
-					{ 
+					{
 						_sendArgs.BufferList = null;
 						_pendingList.Clear();
 
@@ -157,8 +151,13 @@ namespace ServerCore
 					{
 						Console.WriteLine(ex.ToString());
 					}
+
 				}
-			}                 
+				else
+				{
+					Disconnect();
+				}
+			}
 		}
 
 
@@ -166,41 +165,42 @@ namespace ServerCore
 		{
 			if (args.BytesTransferred > 0 && args.SocketError == SocketError.Success)
 			{
-				try
+				try 
 				{
 					if (_recvBuffer.OnWrite(args.BytesTransferred) == false)
 					{
 						Disconnect();
-						return;
+						return; 
 					}
 
 					// 컨텐츠 쪽으로 데이터를 넘겨주고 얼마나 처리했는지 받는다.
 
 					int processLen = OnRecv(_recvBuffer.ReadSegment);
-					if (processLen < 0 || _recvBuffer.DataSize > processLen)
+					if (processLen < 0 || _recvBuffer.DataSize < processLen)
 					{
 						Disconnect();
-						return;
+						return; 
 					}
 
 					if (_recvBuffer.OnRead(processLen) == false)
 					{
-						Disconnect();
+						Disconnect(); 
 						return;
 					}
 
 					RegisterRecv(); 
 				}
 				catch (Exception e)
-				{ 
-					Console.Write("o ");
+				{
+					Console.WriteLine($"OnRecvCompleted Failed {e}");
+
 					//Console.WriteLine(e.ToString());
 				}
-
+				 
 			}
 			else
 			{
-				// TODO Disconnect
+				Disconnect();
 			}
 
 		}

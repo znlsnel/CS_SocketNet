@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ServerCore
 {
@@ -20,8 +21,9 @@ namespace ServerCore
 			Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
 			SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-			args.Completed += new EventHandler<SocketAsyncEventArgs>(OnConnectCompleted);
-			args.RemoteEndPoint = endPoint;
+			//args.Completed += new EventHandler<SocketAsyncEventArgs>(OnConnectCompleted);
+			args.Completed +=OnConnectCompleted;
+			args.RemoteEndPoint = endPoint; 
 			args.UserToken = socket;
 
 			RegisterConnect(args);
@@ -30,8 +32,9 @@ namespace ServerCore
 		public Session GetSession() 
 		{
 			if (_currentSession == null)
-				_currentSession = _sessionFactory.Invoke();
-			 
+				Console.WriteLine("null이누 ;; ");
+			
+
 			return _currentSession;
 		} 
 
@@ -45,7 +48,7 @@ namespace ServerCore
 			if (pending == false)
 				OnConnectCompleted(null, args);
 
-		}
+		} 
 
 		void OnConnectCompleted(Object sender, SocketAsyncEventArgs args)
 		{
