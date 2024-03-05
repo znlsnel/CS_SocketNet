@@ -21,7 +21,7 @@ namespace DummyClient
 		public abstract void Read(ArraySegment<byte> s);
 	}
 	  
-	class PlayerInfoReq : Packet
+	class PlayerInfoReq 
 	{
 		public long playerId;
 		public string name;
@@ -42,7 +42,7 @@ namespace DummyClient
 				success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), duration);
 				count += sizeof(float);
 				  
-				return true;
+				return success;
 			}
 			 
 			public void Read(ReadOnlySpan<byte> s, ref ushort count)
@@ -57,12 +57,8 @@ namespace DummyClient
 		}
 
 		public List<SkillInfo> skills = new List<SkillInfo>(); 
-		public PlayerInfoReq()
-		{
-			this._packetId = (ushort)PacketId.PlayerInfoReq; 
-		}
 		
-		public override void Read(ArraySegment<byte> segment)
+		public void Read(ArraySegment<byte> segment)
 		{
 			ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 			ushort count = 0;
@@ -91,7 +87,7 @@ namespace DummyClient
 			} 
 		}
 
-		public override ArraySegment<byte> Write()
+		public ArraySegment<byte> Write()
 		{ 
 			ArraySegment<byte> segment = SendBufferHelper.Open(4096);
 			Span<byte> s = new Span<byte>(segment.Array, segment.Offset, segment.Count);
@@ -109,7 +105,7 @@ namespace DummyClient
 			ushort nameLen = (ushort)Encoding.Unicode.GetBytes(this.name, 0, this.name.Length, segment.Array, segment.Offset + count + sizeof(ushort));
 			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), nameLen);
 			count += sizeof(ushort); 
-			count += nameLen;
+			count += nameLen; 
 
 			// skill List
 			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)skills.Count);
@@ -135,9 +131,9 @@ namespace DummyClient
 		PlayerInfoReq = 1,
 		PlayerInfoOk = 2,
 	}
-	
+	 
 	public class ServerSession : Session
-	{  
+	{    
 		public override void OnConnected(EndPoint endPoint)
 		{
 			Console.WriteLine($"OnConnected : {endPoint}");

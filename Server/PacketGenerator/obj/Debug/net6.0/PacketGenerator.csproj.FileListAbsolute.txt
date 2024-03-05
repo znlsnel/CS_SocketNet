@@ -1,0 +1,14 @@
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\bin\Debug\net6.0\PacketGenerator.exe
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\bin\Debug\net6.0\PacketGenerator.deps.json
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\bin\Debug\net6.0\PacketGenerator.runtimeconfig.json
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\bin\Debug\net6.0\PacketGenerator.dll
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\bin\Debug\net6.0\PacketGenerator.pdb
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\obj\Debug\net6.0\PacketGenerator.GeneratedMSBuildEditorConfig.editorconfig
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\obj\Debug\net6.0\PacketGenerator.AssemblyInfoInputs.cache
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\obj\Debug\net6.0\PacketGenerator.AssemblyInfo.cs
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\obj\Debug\net6.0\PacketGenerator.csproj.CoreCompileInputs.cache
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\obj\Debug\net6.0\PacketGenerator.dll
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\obj\Debug\net6.0\refint\PacketGenerator.dll
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\obj\Debug\net6.0\PacketGenerator.pdb
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\obj\Debug\net6.0\PacketGenerator.genruntimeconfig.cache
+C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\obj\Debug\net6.0\ref\PacketGenerator.dll
