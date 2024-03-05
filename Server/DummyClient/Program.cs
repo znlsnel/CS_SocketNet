@@ -22,9 +22,11 @@ namespace DummyClient
 			IPHostEntry ipHost = Dns.GetHostEntry(host);
 			//string Ip6Address = "fe80::e03e:ef3d:d51c:74be%7"; 
 			//string Ip6Address = "192.168.219.200"; 
-			string IpAddressLaptop = "192.168.219.101";
+			//string IpAddressLaptop = "192.168.219.101";
 
-			IPAddress ipAddr = IPAddress.Parse(IpAddressLaptop);
+			//IPAddress ipAddr = IPAddress.Parse(IpAddressLaptop);
+			IPAddress ipAddr = ipHost.AddressList[0];
+
 
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 			 
