@@ -22,6 +22,37 @@ namespace MainServer
 		public long playerId;
 		public string name;
 
+		public struct SkillInfo
+		{
+			public int id;
+			public short level;
+			public float duration;
+
+			public bool Write(Span<byte> s, ref ushort count)
+			{
+				bool success = true;
+				success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), id);
+				count += sizeof(int);
+				success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), level);
+				count += sizeof(short);
+				success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), duration);
+				count += sizeof(float);
+
+				return true;
+			}
+
+			public void Read(ReadOnlySpan<byte> s, ref ushort count)
+			{
+				this.id = BitConverter.ToInt32(s.Slice(count, s.Length - count));
+				count += sizeof(int);
+				this.level = BitConverter.ToInt16(s.Slice(count, s.Length - count));
+				count += sizeof(short);
+				this.duration = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+				count += sizeof(float);
+			}
+		}
+
+		public List<SkillInfo> skills = new List<SkillInfo>();
 		public PlayerInfoReq()
 		{
 			this._packetId = (ushort)PacketId.PlayerInfoReq;
@@ -43,6 +74,17 @@ namespace MainServer
 
 			name = Encoding.Unicode.GetString(s.Slice(count, nameLen));
 			count += nameLen;
+
+			ushort skillLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+			count += sizeof(ushort);
+
+			skills.Clear();
+			for (int i = 0; i < skillLen; i++)
+			{
+				SkillInfo skill = new SkillInfo();
+				skill.Read(s, ref count);
+				skills.Add(skill);
+			}
 		}
 
 		public override ArraySegment<byte> Write()
@@ -65,6 +107,14 @@ namespace MainServer
 			count += sizeof(ushort);
 			count += nameLen;
 
+			// skill List
+			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)skills.Count);
+			count += sizeof(ushort);
+			foreach (SkillInfo skill in skills)
+			{
+				success &= skill.Write(s, ref count);
+			}
+
 			success &= BitConverter.TryWriteBytes(s, count);
 
 
@@ -74,7 +124,6 @@ namespace MainServer
 			return SendBufferHelper.close(count);
 		}
 	}
-
 	public enum PacketId
 	{
 		PlayerInfoReq = 1,
@@ -117,6 +166,11 @@ namespace MainServer
 						p.Read(buffer);
 						Console.WriteLine($"PlayerInfoReq :{p.playerId}");
 						Console.WriteLine($"[{p.name}] ");
+						foreach(PlayerInfoReq.SkillInfo skill in p.skills)
+						{
+							Console.WriteLine($"Skill ID : ({skill.id}), Skill Level : ({skill.level}), Skill Duration : ({skill.duration})");
+						}
+						 
 					} 
 					break;
 
