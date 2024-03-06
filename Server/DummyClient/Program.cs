@@ -14,7 +14,7 @@ namespace DummyClient
 
 	class Program
 	{
-
+		 
 		static void Main(string[] args)
 		{ 
 			 Console.WriteLine("===========Im Client===============");
@@ -31,14 +31,23 @@ namespace DummyClient
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 			 
 			Connector connector = new Connector();
-			connector.Connect(endPoint, () => { return new ServerSession(); });   
-			 
-			      
+			connector.Connect(endPoint, () => { return SessionManager.Instance.Generate(); }, 10);   
+			  
+			       
 			while (true)  
-			{ 
-			//	connector.Connect(endPoint, () => { return new ServerSession(); });
-				//Thread.Sleep(100);
+			{
+				try
+				{
+					SessionManager.Instance.SendForEach();
+
+				}
+				catch (Exception ex) {
+				    Console.WriteLine(ex);
+				}
+					Thread.Sleep(250);
+
 				//string chatString = Console.ReadLine(); 
+				//	connector.Connect(endPoint, () => { return new ServerSession(); });
 				//Console.SetCursorPosition(0, Console.CursorTop - 1);
 
 				//// 현재 줄에 공백을 출력하여 내용을 지웁니다.

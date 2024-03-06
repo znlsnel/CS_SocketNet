@@ -1,5 +1,4 @@
 
-using DummyClient;
 using ServerCore;
 using System;
 using System.Collections.Generic;
@@ -7,23 +6,21 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using DummyClient;
  
 namespace MainServer
 {
 	class PacketManager
 	{
 		#region Singleton
-		static PacketManager _instance;
-		public static PacketManager Instance
-		{
-			get
-			{
-				if (_instance == null)
-					_instance = new PacketManager();
-				return _instance;
-			}
-		}
+		static PacketManager _instance = new PacketManager(); 
+		public static PacketManager Instance { get { return _instance; } }
 		#endregion
+ 
+		PacketManager()
+		{
+			Register(); 
+		}
 
 		Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>> _onRecv =
 			new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>>();
@@ -32,9 +29,12 @@ namespace MainServer
 
 		 
 		public void Register()
-		{ 
-			_onRecv.Add((ushort)PacketId.S_Test, MakePacket<S_Test>);
-			_handler.Add((ushort)PacketId.S_Test, PacketHandler.S_TestHandler);
+		{
+			
+			_onRecv.Add((ushort)PacketId.S_Chat, MakePacket<S_Chat>);
+			_handler.Add((ushort)PacketId.S_Chat, PacketHandler.S_ChatHandler); 
+
+
 		}
 
 

@@ -10,12 +10,12 @@ namespace MainServer
 	class Program
 	{
 		static Listener _listener = new Listener();
+		public static GameRoom Room = new GameRoom();
 		static int count = 0;
 		 
 
 		static void Main(string[] args)
 		{
-			PacketManager.Instance.Register();
 			Console.WriteLine("===========Im Server===============");
 
 			// DNS  (Domain Name System)
@@ -31,7 +31,7 @@ namespace MainServer
 			//IPAddress ipAddr = IPAddress.Parse(IpAddressLaptop);
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 			 
-			_listener.Init(endPoint, () =>{ return new ClientSession(); });
+			_listener.Init(endPoint, () =>{ return SessionManager.Instance.Generate(); });
 			 
 			while (true)
 			{

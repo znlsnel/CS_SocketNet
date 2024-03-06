@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Collections.Specialized.BitVector32;
+using System.Collections.Specialized;
 
 namespace ServerCore
 {
@@ -13,30 +14,24 @@ namespace ServerCore
 	{
 
 		Func<Session> _sessionFactory;
-		private Session _currentSession;
-		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory)
+		object _lock = new object();
+		public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory, int count = 1)
 		{
-			_sessionFactory += sessionFactory;
+			for (int i = 0; i < count; i++)
+			{
+				Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+				_sessionFactory = sessionFactory;
 			 
-			Socket socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-			SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-			//args.Completed += new EventHandler<SocketAsyncEventArgs>(OnConnectCompleted);
-			args.Completed +=OnConnectCompleted;
-			args.RemoteEndPoint = endPoint; 
-			args.UserToken = socket;
+				SocketAsyncEventArgs args = new SocketAsyncEventArgs();
+				args.Completed += new EventHandler<SocketAsyncEventArgs>(OnConnectCompleted);
+				//args.Completed +=OnConnectCompleted;
+				args.RemoteEndPoint = endPoint; 
+				args.UserToken = socket;
 
-			RegisterConnect(args);
+				RegisterConnect(args);
+			}
 		}
-
-		public Session GetSession() 
-		{
-			if (_currentSession == null)
-				Console.WriteLine("null이누 ;; ");
-			
-
-			return _currentSession;
-		} 
 
 		void RegisterConnect(SocketAsyncEventArgs args)
 		{
@@ -45,24 +40,30 @@ namespace ServerCore
 				return;
 
 			bool pending = socket.ConnectAsync(args);
+
 			if (pending == false)
 				OnConnectCompleted(null, args);
 
-		} 
-
+		}
+		static int ConnectedCount = 0;
 		void OnConnectCompleted(Object sender, SocketAsyncEventArgs args)
 		{
-			if (args.SocketError == SocketError.Success)
-			{
-				Session session = _sessionFactory.Invoke(); 
-				session.Start(args.ConnectSocket);
-				session.OnConnected(args.RemoteEndPoint); 
-				_currentSession = session;
-			} 
-			else 
-			{
-				Console.WriteLine($"OnConnectedCompleted Fail: {args.SocketError.ToString()}");
-			}
+
+			
+				if (args.SocketError == SocketError.Success)
+				{
+					Session session = _sessionFactory.Invoke(); 
+					session.Start(args.ConnectSocket);
+					session.OnConnected(args.RemoteEndPoint); 
+				}  
+				else 
+				{
+					Console.WriteLine($"OnConnectedCompleted Fail: {args.SocketError.ToString()}");
+				}
+
+			
+
+			
 		}
 
 	}
