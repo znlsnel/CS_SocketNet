@@ -15,6 +15,7 @@ namespace MainServer
 
 		static void Main(string[] args)
 		{
+			PacketManager.Instance.Register();
 			Console.WriteLine("===========Im Server===============");
 
 			// DNS  (Domain Name System)

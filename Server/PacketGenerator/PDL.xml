@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <PDL>
-	<packet name ="PlayerInfoReq">
+	<packet name ="C_PlayerInfoReq">
 		<long name ="playerId"/>
 		<string name ="name"/>
 		<list name ="skill">
@@ -14,7 +14,7 @@
 		</list>
 	</packet>
 
-	<packet name ="Test">
+	<packet name ="S_Test">
 		<int name ="testInt"/>
 		<byte name ="testByte"/>
 		 
