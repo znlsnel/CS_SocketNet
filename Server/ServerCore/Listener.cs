@@ -13,18 +13,21 @@ namespace ServerCore
 		Socket _listenSocket;
 		Func<Session> _sessionFactory; 
 
-		public void Init(IPEndPoint endPoint, Func<Session> seesionFactory) 
+		public void Init(IPEndPoint endPoint, Func<Session> seesionFactory, int register =  10, int backLog = 10) 
 		{
 			_sessionFactory += seesionFactory;  
 
 			_listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 			_listenSocket.Bind(endPoint);
-			_listenSocket.Listen(10); 
+			_listenSocket.Listen(backLog); 
 
-			SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-			args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
-			RegisterAccept(args);
-		}  
+			for (int i = 0; i < register; i++)
+			{
+				SocketAsyncEventArgs args = new SocketAsyncEventArgs();
+				args.Completed += new EventHandler<SocketAsyncEventArgs>(OnAcceptCompleted);
+				RegisterAccept(args);
+			}
+		}   
 		
 		public Session GetSession() { return _sessionFactory.Invoke(); }
 

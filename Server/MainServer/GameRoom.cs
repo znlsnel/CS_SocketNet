@@ -4,13 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MainServer;
+using ServerCore;
 
 namespace MainServer
 { 
-    public class GameRoom
+    public class GameRoom : IJobQueue 
 	{
 		List<ClientSession> _sessions = new List<ClientSession>();
-		object _lock = new object();
+		JobQueue _jobQueue = new JobQueue();
+		 
+		public void Push(Action job)
+		{ 
+			_jobQueue.Push(job);
+		} 
 
 		public void Broadcast(ClientSession session, string chat)
 		{
@@ -18,31 +24,25 @@ namespace MainServer
 			packet.playerID = session.SessionId;
 			packet.chat = chat + $"나는 [{packet.playerID}]야!";
 			ArraySegment<byte> segment = packet.Write();
-
-			lock (_lock)
-			{
-				foreach (ClientSession s in _sessions)
-					s.Send(segment);
-			} 
-
+			 
+			foreach (ClientSession s in _sessions)
+				s.Send(segment);
+			
 		}
-
 
 		public void Enter(ClientSession session)
 		{
-			lock (_lock)
-			{
-				_sessions.Add(session);
-				session.Room = this;
-			} 
+			_sessions.Add(session);
+			session.Room = this;
+			
 		}
 		public void Leave(ClientSession session)
 		{
-			    lock (this)
-			    {
-				_sessions.Remove(session);	
-			    }
+			_sessions.Remove(session);	
+			    
 
-		} 
+		}
+
+
 	}
 }
