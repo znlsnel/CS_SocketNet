@@ -36,7 +36,7 @@ namespace DummyClient
 			       
 			while (true)  
 			{
-				try
+				try 
 				{
 					SessionManager.Instance.SendForEach();
 
