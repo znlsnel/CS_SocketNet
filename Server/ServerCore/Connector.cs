@@ -48,8 +48,6 @@ namespace ServerCore
 		static int ConnectedCount = 0;
 		void OnConnectCompleted(Object sender, SocketAsyncEventArgs args)
 		{
-
-			
 				if (args.SocketError == SocketError.Success)
 				{
 					Session session = _sessionFactory.Invoke(); 
@@ -60,11 +58,6 @@ namespace ServerCore
 				{
 					Console.WriteLine($"OnConnectedCompleted Fail: {args.SocketError.ToString()}");
 				}
-
-			
-
-			
 		}
-
 	}
 }

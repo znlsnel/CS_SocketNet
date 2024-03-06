@@ -34,8 +34,9 @@ namespace MainServer
 			_listener.Init(endPoint, () =>{ return SessionManager.Instance.Generate(); });
 			 
 			while (true)
-			{
-				;
+			{ 
+				Room.Push(() => Room.Flush());
+				Thread.Sleep(250);
 			}
 
 		}

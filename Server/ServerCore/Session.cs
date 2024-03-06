@@ -17,7 +17,8 @@ namespace ServerCore
 		public sealed override int OnRecv(ArraySegment<byte> buffer)
 		{
 			int processLen = 0;
-			  
+
+			int packetCount = 0;
 			while (true) 
 			{
 				// 최소한 헤더는 파싱할 수 있는지 체크!
@@ -29,26 +30,30 @@ namespace ServerCore
 				ushort dataSize = 	BitConverter.ToUInt16(buffer.Array, buffer.Offset);
 				if (buffer.Count < dataSize)
 					break;
-				 
+				packetCount++;
 				// 여기까지 왔으면 패킷 조립 가능
 				OnRecvPacket(new ArraySegment<byte>(buffer.Array, buffer.Offset, dataSize));
 				 
 				processLen += dataSize;
 				buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
 			}
+			 
+			if (packetCount > 1)
+				Console.WriteLine($"패킷 모아보내기 :{packetCount}");
+
 			return processLen;   
 		}
 
 		public abstract void OnRecvPacket(ArraySegment<byte> buffer);
 
 	}
-
+	 
 	public abstract class Session
 	{
 		Socket _socket;
 		int _disconnected = 0;
 		 
-		RecvBuffer _recvBuffer = new RecvBuffer(1024);
+		RecvBuffer _recvBuffer = new RecvBuffer(65535);
 		
 		
 		object _lock = new object();
@@ -96,8 +101,23 @@ namespace ServerCore
 				
                 
 			}
+		} 
+		public void Send(List<ArraySegment<byte>> datas)
+		{
+			if (datas.Count == 0) return;
+			 
+			lock (_lock) 
+			{ 
+				if (_socket == null)
+					return; 
+				  
+				foreach (var data in datas)
+					_sendQueue.Enqueue(data); 
+
+				if (_pendingList.Count == 0)
+					RegisterSend();
+			}
 		}
-		
 		public void Disconnect()
 		{
 

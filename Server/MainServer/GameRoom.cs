@@ -12,11 +12,21 @@ namespace MainServer
 	{
 		List<ClientSession> _sessions = new List<ClientSession>();
 		JobQueue _jobQueue = new JobQueue();
-		 
-		public void Push(Action job)
+		List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
+
+		public void Push(Action job) 
 		{ 
 			_jobQueue.Push(job);
-		} 
+		}
+
+		public void Flush()
+		{
+			foreach (ClientSession s in _sessions)
+				s.Send(_pendingList);
+
+			Console.WriteLine($"Flushed [{_pendingList.Count}] items");
+			_pendingList.Clear();
+		}
 
 		public void Broadcast(ClientSession session, string chat)
 		{
@@ -24,11 +34,10 @@ namespace MainServer
 			packet.playerID = session.SessionId;
 			packet.chat = chat + $"나는 [{packet.playerID}]야!";
 			ArraySegment<byte> segment = packet.Write();
-			 
-			foreach (ClientSession s in _sessions)
-				s.Send(segment);
-			
-		}
+
+			_pendingList.Add(segment);
+
+		} 
 
 		public void Enter(ClientSession session)
 		{
