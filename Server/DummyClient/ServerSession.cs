@@ -22,13 +22,15 @@ namespace DummyClient
 		public abstract void Read(ArraySegment<byte> s);
 	}
 
-
+	 
 
 	public class ServerSession : PacketSession
-	{    
+	{
+		public string _name = "";
 		public override void OnConnected(EndPoint endPoint)
 		{
-			Console.WriteLine($"OnConnected : {endPoint}");
+			//Console.WriteLine($"OnConnected : {endPoint}");
+			Console.WriteLine($"==========연결 성공!=========="); 
 		}
 		  
 		public override void OnDisconnected(EndPoint endPoint)

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
  
 namespace MainServer
-{ 
+{
 	class PacketManager
 	{
 		#region Singleton

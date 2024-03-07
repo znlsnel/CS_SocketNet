@@ -13,7 +13,7 @@ namespace ServerCore
 		Socket _listenSocket;
 		Func<Session> _sessionFactory; 
 
-		public void Init(IPEndPoint endPoint, Func<Session> seesionFactory, int register =  10, int backLog = 10) 
+		public void Init(IPEndPoint endPoint, Func<Session> seesionFactory, int register =  10, int backLog = 50) 
 		{
 			_sessionFactory += seesionFactory;  
 

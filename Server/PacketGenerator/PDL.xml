@@ -2,13 +2,14 @@
 
 <PDL>
 	<packet name ="C_Chat">
+		<string name ="playerName"/>
 		<string name ="chat"/>
 	</packet>
- 
+
 	<packet name ="S_Chat">
 		<int name ="playerID"/>
 		<string name ="chat"/>
-		 
-	</packet> 
-	
-</PDL> 
+ 
+	</packet>
+
+</PDL>

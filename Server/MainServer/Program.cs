@@ -17,11 +17,11 @@ namespace MainServer
 		{
 			Room.Push(() => Room.Flush());
 			JobTimer.Instance.Push(FlushRoom, 250);
-		}
+		} 
 		 
 		static void Main(string[] args)
 		{
-			Console.WriteLine("===========Im Server===============");
+			Console.WriteLine("===========Server===============");
 
 			// DNS  (Domain Name System)
 			// 172.1.2.3 이러한 IP 주소를 www.naver.com 과 같은 형태로 바꿔줌

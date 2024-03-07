@@ -26,6 +26,7 @@ interface IPacket
  
 class C_Chat : IPacket
 {    
+	public string playerName;
 	public string chat; 
 
 	public ushort Protocol { get { return (ushort)PacketId.C_Chat; } }
@@ -36,6 +37,13 @@ class C_Chat : IPacket
 		ReadOnlySpan<byte> s = new ReadOnlySpan<byte>(segment.Array, segment.Offset, segment.Count);
 		count += sizeof(ushort);
 		count += sizeof(ushort);
+		
+		
+		ushort playerNameLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
+		count += sizeof(ushort); 
+		  
+		this.playerName = Encoding.Unicode.GetString(s.Slice(count, playerNameLen));
+		count += playerNameLen; 
 		
 		
 		ushort chatLen = BitConverter.ToUInt16(s.Slice(count, s.Length - count));
@@ -58,6 +66,12 @@ class C_Chat : IPacket
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), (ushort)PacketId.C_Chat);
 		count += sizeof(ushort);
 
+		
+		ushort playerNameLen = (ushort)Encoding.Unicode.GetBytes(this.playerName, 0, this.playerName.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), playerNameLen);
+		count += sizeof(ushort); 
+		count += playerNameLen; 
+		
 		
 		ushort chatLen = (ushort)Encoding.Unicode.GetBytes(this.chat, 0, this.chat.Length, segment.Array, segment.Offset + count + sizeof(ushort));
 		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), chatLen);

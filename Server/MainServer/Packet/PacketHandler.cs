@@ -15,6 +15,8 @@ namespace MainServer
 			C_Chat chatPacket = packet as C_Chat;
 			ClientSession clientSession = session as ClientSession;
 
+			chatPacket.chat = $"[{chatPacket.playerName}]" + chatPacket.chat;
+			 
 			if (clientSession.Room == null)
 				return;
 			 

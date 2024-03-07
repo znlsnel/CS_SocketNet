@@ -14,14 +14,14 @@ namespace DummyClient
 		{ 
 			S_Chat chatPacket = (S_Chat)packet;
 			ServerSession serverSession = session as ServerSession;
-
+			 
 			chatCount++;
-			//if (chatPacket.playerID == 1) 
-			//Console.WriteLine(chatPacket.chat);
-			 
+
+			Console.WriteLine(chatPacket.chat);
+
 			if (chatCount % 10000 == 0)
-				Console.WriteLine($"Recv Chat Count : [{chatCount}]");
-			 
+				Console.WriteLine($"Total Received Chats : [{chatCount}]");
+
 		}
 	}
 }

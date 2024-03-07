@@ -32,7 +32,7 @@ namespace MainServer
 		{
 			S_Chat packet = new S_Chat();
 			packet.playerID = session.SessionId;
-			packet.chat = chat + $"나는 [{packet.playerID}]야!";
+			packet.chat = $"ID:{packet.playerID}" + chat; 
 			ArraySegment<byte> segment = packet.Write();
 
 			_pendingList.Add(segment);
