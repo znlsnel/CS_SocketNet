@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\DEVELOPMENT\\GIT\\C#-Server\\Server\\PacketGenerator\\PacketGenerator.csproj": {}
+    "D:\\PROJECTS\\Git\\C-Server\\Server\\PacketGenerator\\PacketGenerator.csproj": {}
   },
   "projects": {
-    "C:\\DEVELOPMENT\\GIT\\C#-Server\\Server\\PacketGenerator\\PacketGenerator.csproj": {
+    "D:\\PROJECTS\\Git\\C-Server\\Server\\PacketGenerator\\PacketGenerator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\DEVELOPMENT\\GIT\\C#-Server\\Server\\PacketGenerator\\PacketGenerator.csproj",
+        "projectUniqueName": "D:\\PROJECTS\\Git\\C-Server\\Server\\PacketGenerator\\PacketGenerator.csproj",
         "projectName": "PacketGenerator",
-        "projectPath": "C:\\DEVELOPMENT\\GIT\\C#-Server\\Server\\PacketGenerator\\PacketGenerator.csproj",
+        "projectPath": "D:\\PROJECTS\\Git\\C-Server\\Server\\PacketGenerator\\PacketGenerator.csproj",
         "packagesPath": "C:\\Users\\dudth\\.nuget\\packages\\",
-        "outputPath": "C:\\DEVELOPMENT\\GIT\\C#-Server\\Server\\PacketGenerator\\obj\\",
+        "outputPath": "D:\\PROJECTS\\Git\\C-Server\\Server\\PacketGenerator\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\dudth\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -10,9 +10,9 @@ using ServerCore;
 namespace DummyClient
 {
 
-
-
-	class Program
+	 
+	 
+	class Program 
 	{
 		 
 		static void Main(string[] args)
@@ -24,8 +24,8 @@ namespace DummyClient
 			string Ip6Address = "192.168.219.100"; 
 			//string IpAddressLaptop = "192.168.219.101";
 
-			IPAddress ipAddr = IPAddress.Parse(Ip6Address);
-			//IPAddress ipAddr = ipHost.AddressList[0];
+			//IPAddress ipAddr = IPAddress.Parse(Ip6Address);
+			IPAddress ipAddr = ipHost.AddressList[0];
 
 
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
