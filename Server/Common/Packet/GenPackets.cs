@@ -2,7 +2,6 @@
 using ServerCore;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
@@ -16,7 +15,7 @@ public enum PacketId
  
 }
 
-interface IPacket
+public interface IPacket
 {
 	ushort Protocol { get; }
 	void Read(ArraySegment<byte> segment); 

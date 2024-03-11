@@ -9,14 +9,13 @@ using System.Net.Sockets;
 using System.Text; 
 using System.Threading.Tasks;
 
- 
 public enum PacketId
 {
 		C_Chat = 1,	S_Chat = 2,
  
 }
 
-interface IPacket
+public interface IPacket
 {
 	ushort Protocol { get; }
 	void Read(ArraySegment<byte> segment); 
@@ -26,7 +25,7 @@ interface IPacket
  
 class C_Chat : IPacket
 {    
-	public string playerName;
+	public string playerName = "";
 	public string chat; 
 
 	public ushort Protocol { get { return (ushort)PacketId.C_Chat; } }

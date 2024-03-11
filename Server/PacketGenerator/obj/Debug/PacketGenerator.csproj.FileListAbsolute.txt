@@ -22,3 +22,17 @@ C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\bin#\Debug\PacketGenerator.d
 C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\bin#\Debug\PacketGenerator.runtimeconfig.json
 C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\bin#\Debug\PacketGenerator.dll
 C:\DEVELOPMENT\GIT\C#-Server\Server\PacketGenerator\bin#\Debug\PacketGenerator.pdb
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\bin\Debug\PacketGenerator.exe
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\bin\Debug\PacketGenerator.deps.json
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\bin\Debug\PacketGenerator.runtimeconfig.json
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\bin\Debug\PacketGenerator.dll
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\bin\Debug\PacketGenerator.pdb
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\obj\Debug\PacketGenerator.GeneratedMSBuildEditorConfig.editorconfig
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\obj\Debug\PacketGenerator.AssemblyInfoInputs.cache
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\obj\Debug\PacketGenerator.AssemblyInfo.cs
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\obj\Debug\PacketGenerator.csproj.CoreCompileInputs.cache
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\obj\Debug\PacketGenerator.dll
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\obj\Debug\refint\PacketGenerator.dll
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\obj\Debug\PacketGenerator.pdb
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\obj\Debug\PacketGenerator.genruntimeconfig.cache
+D:\PROJECTS\Git\C-Server\Server\PacketGenerator\obj\Debug\ref\PacketGenerator.dll
