@@ -11,8 +11,8 @@ namespace ServerCore
 		// 현재 쓰레드에서만 고유하게 사용할 수 있는 전역 버퍼
 		public static ThreadLocal<SendBuffer> CurrentBuffer = new ThreadLocal<SendBuffer>(() =>{return null; });
 
-		public static int ChunkSize { get; set; } = 4096 * 100;
-
+		public static int ChunkSize { get; set; } = 65536 * 100;
+		 
 		public static ArraySegment<byte> Open(int reserveSize)
 		{
 			if (CurrentBuffer.Value == null)

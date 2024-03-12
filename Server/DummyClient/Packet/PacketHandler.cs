@@ -4,24 +4,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static S_PlayerList;
 
-namespace DummyClient
+ 
+class PacketHandler
 {
-	class PacketHandler
-	{
-		static int chatCount = 0;
-		public static void S_ChatHandler(PacketSession session, IPacket packet)
-		{ 
-			S_Chat chatPacket = (S_Chat)packet;
-			ServerSession serverSession = session as ServerSession;
-			 
-			chatCount++;
-
-			Console.WriteLine(chatPacket.chat);
-
-			if (chatCount % 10000 == 0)
-				Console.WriteLine($"Total Received Chats : [{chatCount}]");
-
-		}
+	public static void S_BroadcastEnterGameHandler(PacketSession session, IPacket packet)
+	{ 
+		S_BroadcastEnterGame pkt = packet as S_BroadcastEnterGame;
+		ServerSession serverSession = session as ServerSession;
 	}
+
+	public static void S_BroadcastLeaveGameHandler(PacketSession session, IPacket packet)
+	{
+		S_BroadcastLeaveGame pkt = packet as S_BroadcastLeaveGame;
+		ServerSession serverSession = session as ServerSession;
+	}
+
+	public static void S_PlayerListHandler(PacketSession session, IPacket packet)
+	{
+		S_PlayerList pkt = packet as S_PlayerList;
+		ServerSession serverSession = session as ServerSession;
+	}
+	public static void S_BroadcastMoveHandler(PacketSession session, IPacket packet)
+	{
+		S_BroadcastMove pkt = packet as S_BroadcastMove;
+		ServerSession serverSession = session as ServerSession;
+	}  
 }
+

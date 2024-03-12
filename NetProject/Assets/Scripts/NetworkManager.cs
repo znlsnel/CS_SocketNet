@@ -5,11 +5,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
+using static System.Collections.Specialized.BitVector32;
 
 public class NetworkManager : MonoBehaviour
 {
 	ServerSession _session = new ServerSession();
 
+	public void Send(ArraySegment<byte> data)
+	{
+		_session.Send(data);
+	}
+	 
+	 
     void Start()
     {
 		Console.WriteLine("===========Client===============");
@@ -26,28 +33,14 @@ public class NetworkManager : MonoBehaviour
 		 
 		connector.Connect(endPoint, () => { return _session; }, 1);
 
-		StartCoroutine("CoSendPacket"); 
 	}
 	 
 	void Update()
 	{
-		IPacket packet = PacketQueue.Instance.Pop();
-		if (packet != null) 
-		{
-			PacketManager.Instance.HandlePacket(_session, packet);
-		}
+		List<IPacket> packetList = PacketQueue.Instance.PopAll();
+		
+		foreach(IPacket packet in packetList)
+				PacketManager.Instance.HandlePacket(_session, packet);
 	} 
-	 
-	IEnumerator CoSendPacket()
-	{
-		while (true)
-		{
-			yield return new WaitForSeconds(1.0f);
-
-			C_Chat chatPacket = new C_Chat();
-			chatPacket.chat = "Hello Unity!";
-			ArraySegment<byte> segment = chatPacket.Write();
-			_session.Send(segment);
-		}
-	}
+	  
 }

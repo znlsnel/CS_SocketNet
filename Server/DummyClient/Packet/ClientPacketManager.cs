@@ -6,9 +6,9 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using DummyClient;
+ 
 
-class PacketManager
+public class PacketManager
 {
 	#region Singleton
 	static PacketManager _instance = new PacketManager(); 
@@ -29,8 +29,20 @@ class PacketManager
 	public void Register()
 	{
 		
-			_makeFunc.Add((ushort)PacketId.S_Chat, MakePacket<S_Chat>); 
-			_handler.Add((ushort)PacketId.S_Chat, PacketHandler.S_ChatHandler); 
+			_makeFunc.Add((ushort)PacketId.S_BroadcastEnterGame, MakePacket<S_BroadcastEnterGame>); 
+			_handler.Add((ushort)PacketId.S_BroadcastEnterGame, PacketHandler.S_BroadcastEnterGameHandler); 
+
+
+			_makeFunc.Add((ushort)PacketId.S_BroadcastLeaveGame, MakePacket<S_BroadcastLeaveGame>); 
+			_handler.Add((ushort)PacketId.S_BroadcastLeaveGame, PacketHandler.S_BroadcastLeaveGameHandler); 
+
+
+			_makeFunc.Add((ushort)PacketId.S_PlayerList, MakePacket<S_PlayerList>); 
+			_handler.Add((ushort)PacketId.S_PlayerList, PacketHandler.S_PlayerListHandler); 
+
+
+			_makeFunc.Add((ushort)PacketId.S_BroadcastMove, MakePacket<S_BroadcastMove>); 
+			_handler.Add((ushort)PacketId.S_BroadcastMove, PacketHandler.S_BroadcastMoveHandler); 
 
 
 	}

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
 public class PacketQueue
@@ -27,4 +28,19 @@ public class PacketQueue
 			return _packetQueue.Dequeue();
 		}
 	}
+
+	public List<IPacket> PopAll()
+	{
+		List<IPacket> list = new List<IPacket>();
+
+		lock (_lock)
+		{
+			while (_packetQueue.Count > 0)
+			{
+				list.Add(_packetQueue.Dequeue());	
+			}
+		}
+		return list;
+	}
 }
+

@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MainServer
-{
+
     class SessionManager
     {
         static SessionManager _session = new SessionManager();
@@ -47,4 +46,4 @@ namespace MainServer
             }
         }
     }
-}
+
