@@ -28,8 +28,8 @@ class Program
 		Connector connector = new Connector();
 		//connector.Connect(endPoint, () => { return SessionManager.Instance.Generate(); }, 1);   
 
-		connector.Connect(endPoint, () => { return SessionManager.Instance.Generate(); }, 500);
-			 
+		connector.Connect(endPoint, () => { return SessionManager.Instance.Generate(); }, 0);
+		 
 		while (true)  
 		{
 			try 

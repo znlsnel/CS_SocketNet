@@ -3,9 +3,12 @@
 <PDL>
 	<packet name ="S_BroadcastEnterGame">
 		<int name ="playerId"/>
-		<float name ="posX"/>
-		<float name ="posY"/>
-		<float name ="posZ"/> 
+		<struct name ="pos"> 
+			<float name ="x"/>
+			<float name ="z"/>
+			<float name ="y"/>
+		</struct>
+		
 	</packet>
 	<packet name="C_LeaveGame">
 	</packet>

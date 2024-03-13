@@ -211,6 +211,29 @@ public class {0}
 public List<{0}> {1}s = new List<{0}>(); 
 ";
 
+public static string memberStructFormat =
+@"   
+public class {0}
+{{  
+	{2}
+ 
+	public void Read(ReadOnlySpan<byte> s, ref ushort count)
+	{{ 
+		{3}
+	}}  
+
+	public bool Write(Span<byte> s, ref ushort count)
+	{{
+		bool success = true;
+		{4}
+				   
+		return success;
+	}}
+
+}}    
+public {0} {1} = new {0}(); 
+";
+
 		// {0} 변수 이름
 		// {1} TO~ 변수 형식
 		// {2} 변수 형식
@@ -219,6 +242,9 @@ public List<{0}> {1}s = new List<{0}>();
 {0} = BitConverter.{1}(s.Slice(count, s.Length - count));
 count += sizeof({2});
 ";
+		
+
+
 		// 이름
 		// 형식
 		public static string readByteFormat =
@@ -249,6 +275,13 @@ for (int i = 0; i < {1}Len; i++)
 	{1}s.Add({1}); 
 }}
 ";
+
+		// {0} 리스트 이름 [소문자] 
+		public static string readStructFormat =
+@"
+{0}.Read(s, ref count);
+";
+		 
 
 		// {0} = 변수 이름
 		// {1} = 변수 형식
@@ -283,6 +316,10 @@ foreach ({0} {1} in this.{1}s)
 	success &= {1}.Write(s, ref count); 
 }}
 ";
-		 
+		// {0} 리스트 이름 [소문자]
+		public static string writeStructFormat =
+@"
+success &= {0}.Write(s, ref count); 
+";
 	}
 }

@@ -132,17 +132,23 @@ namespace PacketGenerator
 						memberCode += string.Format(PacketFormat.memberFormat, memberType, memberName);
 						readCode += string.Format(PacketFormat.readFormat, memberName, ToMemberType(memberType), memberType);
 						writeCode += string.Format(PacketFormat.writeFormat, memberName, memberType);
-						break; 
+						break;
 					case "string": 
 						memberCode += string.Format(PacketFormat.memberFormat, memberType, memberName);
 						readCode += string.Format(PacketFormat.readStringFormat, memberName);
 						writeCode += string.Format(PacketFormat.writeStringFormat, memberName); 
-						break;
+						break; 
 					case "list":
 						Tuple<string, string, string> t =  ParseList(r);
 						memberCode += t.Item1;
 						readCode += t.Item2;
 						writeCode += t.Item3;  
+						break;
+					case "struct":
+						Tuple<string, string, string> st = ParseStruct(r);
+						memberCode += st.Item1;
+						readCode += st.Item2;
+						writeCode += st.Item3;   
 						break;
 					default:
 						break;
@@ -184,6 +190,34 @@ namespace PacketGenerator
 				FirstCharToLower(listName) 
 				);
 			 
+			return new Tuple<string, string, string>(memberCode, readCode, writeCode);
+		}
+
+		public static Tuple<string, string, string> ParseStruct(XmlReader r)
+		{
+			string listName = r["name"];
+
+			if (string.IsNullOrEmpty(listName))
+			{
+				Console.WriteLine("List without name");
+				return null;
+			}
+
+			Tuple<string, string, string> t = ParseMembers(r);
+			string memberCode = string.Format(
+				PacketFormat.memberListFormat,
+				FirstCharToUpper(listName),
+				FirstCharToLower(listName),
+				t.Item1, t.Item2, t.Item3);
+
+
+			string readCode = string.Format(PacketFormat.readStructFormat,
+				FirstCharToLower(listName)
+				);
+			string writeCode = string.Format(PacketFormat.writeStructFormat,
+				FirstCharToLower(listName) 
+				);
+
 			return new Tuple<string, string, string>(memberCode, readCode, writeCode);
 		}
 
