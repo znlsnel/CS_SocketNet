@@ -35,6 +35,10 @@ public class PacketManager
 	public void Register()
 	{
 		
+			_makeFunc.Add((ushort)PacketId.C_Chat, MakePacket<C_Chat>); 
+			_handler.Add((ushort)PacketId.C_Chat, PacketHandler.C_ChatHandler); 
+
+
 			_makeFunc.Add((ushort)PacketId.C_LeaveGame, MakePacket<C_LeaveGame>); 
 			_handler.Add((ushort)PacketId.C_LeaveGame, PacketHandler.C_LeaveGameHandler); 
 

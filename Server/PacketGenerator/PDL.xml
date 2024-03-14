@@ -8,6 +8,16 @@
 		<vector3 name ="destPoint"/>
 	</packet>
 
+	<packet name ="C_Chat">
+		<string name ="playerName"/>
+		<string name ="ChatText"/>
+	</packet>
+ 
+	<packet name ="S_BroadcastChat">
+		<string name ="playerName"/>
+		<string name ="ChatText"/>
+	</packet>
+
 	<packet name="C_LeaveGame">
 	</packet>
 	<packet name="S_BroadcastLeaveGame">

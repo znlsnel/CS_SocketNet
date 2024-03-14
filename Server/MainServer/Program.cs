@@ -12,13 +12,13 @@ class Program
 	static int count = 0;
 		 
 	static void FlushRoom()
-	{
-		Room.Push(() => Room.Flush());
-		JobTimer.Instance.Push(FlushRoom, 250);
+	{ 
+		Room.Push(() => Room.Flush());  
+		JobTimer.Instance.Push(FlushRoom, 1);
 	} 
-		
-	static void Main(string[] args)
-	{
+		  
+	static void Main(string[] args) 
+	{ 
 		Console.WriteLine("===========Server===============");
 
 		// DNS  (Domain Name System)
@@ -37,7 +37,7 @@ class Program
 		_listener.Init(endPoint, () =>{ return SessionManager.Instance.Generate(); });
 
 
-
+		 
 		JobTimer.Instance.Push(FlushRoom);
 		while (true)
 		{

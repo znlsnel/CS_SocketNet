@@ -5,33 +5,39 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
-public class MyPlayerController : PlayerController
+public class MyPlayer : Player
 {
         // Start is called before the first frame update 
-        float walkSpeed = 1.5f;
-	
-    void Start()
-    {   
-         InitCtrl();
-        Camera.main.GetComponent<CameraController>().InitCamera(gameObject);
-    }
+	NetworkManager _network;
+
+	void Start()
+	{     
+		InitCtrl(); 
+		Camera.main.GetComponent<CameraController>().InitCamera(gameObject);
+		//StartCoroutine("CoSendPacket");
+		_network = GameObject.Find("NetManager").GetComponent<NetworkManager>();
+	}
           
     // Update is called once per frame 
     void Update()
     {
 		Vector3 moveDir;
-		Vector3 lookDir; 
 		Vector3 lookPoint;
-		GetMoveLookDir(out moveDir, out lookDir, out lookPoint);
 
-		//_rigidBody.MovePosition(transform.position +( moveDir * Time.fixedDeltaTime * 1.0f));
-		if (moveDir.magnitude > 0.1) 
-			transform.Translate(moveDir * Time.fixedDeltaTime * walkSpeed, Space.World);  
-		transform.LookAt(lookPoint); 
-		_animCtrl.SetDir(moveDir, lookDir); 
-	} 
+		GetMoveLookDir(out moveDir, out lookPoint);
+		
+		C_Move move = new C_Move();
+		move.position = Utills.MakeVector3(transform.position);
+		move.destPoint = Utills.MakeVector3(lookPoint);
+		move.moveDir = Utills.MakeVector3(moveDir); 
+		_network.Send(move.Write());
 
-	void GetMoveLookDir(out  Vector3 moveDir, out Vector3 lookDir, out Vector3 lookPoint)
+		UpdatePosition();
+		 
+		//TranslatePlayer(transform.position, moveDir, lookPoint);
+	}
+
+	void GetMoveLookDir(out  Vector3 moveDir, out Vector3 lookPoint)
         {
 		float horizontal = Input.GetAxis("Horizontal");
 		float vertical = Input.GetAxis("Vertical");
@@ -65,11 +71,9 @@ public class MyPlayerController : PlayerController
 		Physics.Raycast(rayStartPos, rayDir, out hitInfo, 50, mask);
 		Vector3 point = hitInfo.point;
 
-		lookDir = point - transform.position; 
-		lookDir.y = 0;
-		lookDir.Normalize();
 		point.y = transform.position.y;
 		lookPoint = point;
-		 
 	}
+
+	
 }

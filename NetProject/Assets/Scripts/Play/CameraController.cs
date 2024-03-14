@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-	public float maxDistance = 2.0f;
-	public float cameraSpeed = 2.0f;
-
-        // Start is called before the first frame update
-        GameObject _player;
+	public float maxDistance = 1.0f;   
+	public float cameraSpeed = 5.0f;
+	public Vector3 cameraPos = new Vector3(-5.0f, 7.0f, 0.0f);  
+	// Start is called before the first frame update
+	GameObject _player;
         void Start()
         {
 		 
-        }
-        
+        } 
+         
         // Update is called once per frame
         void Update()
         {
@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
 		if (_player == null)
 			return;
 
-		Vector3 nextCameraPos = _player.transform.position + new Vector3(-5.0f, 7.0f, 0.0f);
+		Vector3 nextCameraPos = _player.transform.position + cameraPos;
 		Vector3 moveDIr = nextCameraPos - transform.position;
 		float moveDirLength = moveDIr.magnitude;
 
@@ -47,8 +47,8 @@ public class CameraController : MonoBehaviour
 
 	public void InitCamera(GameObject player)
         {
-                _player = player; 
-		transform.position = _player.transform.position + new Vector3(-5.0f, 7.0f, 0.0f);
+                _player = player;  
+		transform.position = _player.transform.position + cameraPos;
 		transform.LookAt(_player.transform.position);
 	}
 }

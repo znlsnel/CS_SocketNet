@@ -78,8 +78,18 @@ public class GameRoom : IJobQueue
 		S_BroadcastMove move = new S_BroadcastMove();
 		move.playerId = session.SessionId;
 		move.position= packet.position;
-
+		move.moveDir = packet.moveDir;
+		move.destPoint = packet.destPoint;
 		 
 		Broadcast(move.Write());  
+	}
+
+	public void Chating(C_Chat packet)
+	{
+		S_BroadcastChat chat = new S_BroadcastChat();
+		chat.playerName = packet.playerName;
+		chat.ChatText = packet.ChatText;
+
+		Broadcast(chat.Write());
 	}
 }

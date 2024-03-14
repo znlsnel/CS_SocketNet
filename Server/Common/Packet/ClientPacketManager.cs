@@ -39,6 +39,10 @@ public class PacketManager
 			_handler.Add((ushort)PacketId.S_BroadcastEnterGame, PacketHandler.S_BroadcastEnterGameHandler); 
 
 
+			_makeFunc.Add((ushort)PacketId.S_BroadcastChat, MakePacket<S_BroadcastChat>); 
+			_handler.Add((ushort)PacketId.S_BroadcastChat, PacketHandler.S_BroadcastChatHandler); 
+
+
 			_makeFunc.Add((ushort)PacketId.S_BroadcastLeaveGame, MakePacket<S_BroadcastLeaveGame>); 
 			_handler.Add((ushort)PacketId.S_BroadcastLeaveGame, PacketHandler.S_BroadcastLeaveGameHandler); 
 

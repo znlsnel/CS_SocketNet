@@ -18,14 +18,16 @@ class PacketHandler
 
 		PlayerManager.Instnace.EnterGame(pkt); 
 	}
-	public static void S_TESTHandler(PacketSession session, IPacket packet)
+
+	public static void S_BroadcastChatHandler(PacketSession session, IPacket packet)
 	{
-		S_BroadcastEnterGame pkt = packet as S_BroadcastEnterGame;
+		S_BroadcastChat pkt = packet as S_BroadcastChat;
 		ServerSession serverSession = session as ServerSession;
 
-		PlayerManager.Instnace.EnterGame(pkt);
-	} 
+		if (serverSession == null || pkt == null) return;
 
+		PlayerManager.Instnace.Chat(pkt);
+	} 
 	public static void S_BroadcastLeaveGameHandler(PacketSession session, IPacket packet)
 	{
 		S_BroadcastLeaveGame pkt = packet as S_BroadcastLeaveGame;

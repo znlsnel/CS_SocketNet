@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static S_PlayerList;
 
 public class PlayerManager 
 {
-	MyPlayer _myPlayer;
+	public MyPlayer _myPlayer;
 	Dictionary<int, Player> _players = new Dictionary<int, Player>();        
-	public static PlayerManager Instnace { get; } = new PlayerManager(); 
+	public static PlayerManager Instnace { get; } = new PlayerManager();
+	UIManager _uiManager;
 	// Start is called before the first frame update
 
 	public void EnterGame(S_BroadcastEnterGame packet)
@@ -15,16 +17,18 @@ public class PlayerManager
 			return;
 
 		if (_myPlayer.PlayerId == packet.playerId) return;
-
-		Object obj = Resources.Load("Player");
+		 
+		Object obj = Resources.Load("Character_1");
 		GameObject go = Object.Instantiate(obj) as GameObject;
-
-
+		 
+		 
 		Player player = go.AddComponent<Player>();
-		player.transform.position = new Vector3(packet.posX, packet.posY, packet.posZ);
+
+		player.TranslatePlayer(packet.position, packet.moveDir, packet.destPoint);
+
 		_players.Add(packet.playerId, player); 
 	} 
-	public void LeaveGame(S_BroadcastLeaveGame packet)
+	public void LeaveGame(S_BroadcastLeaveGame packet) 
 	{
 		if (_myPlayer.PlayerId == packet.playerId)
 		{
@@ -44,8 +48,8 @@ public class PlayerManager
 	}
 
 	public void Add(S_PlayerList packet)
-	{
-		Object obj = Resources.Load("Player");
+	{ 
+		Object obj = Resources.Load("Character_1"); 
 
 		foreach (S_PlayerList.Player p in packet.players)
 		{
@@ -53,14 +57,15 @@ public class PlayerManager
 			if (p.isSelf)
 			{
 				MyPlayer myPlayer = go.AddComponent<MyPlayer>();
-				myPlayer.transform.position = new Vector3(p.posX, p.posY, p.posZ);
 				_myPlayer = myPlayer;
 				_myPlayer.PlayerId = p.playerId; 
-			}
+				  
+				_myPlayer.TranslatePlayer(p.position, p.moveDir, p.destPoint);
+			} 
 			else
 			{
 				Player player = go.AddComponent<Player>();
-				player.transform.position = new Vector3(p.posX, p.posY, p.posZ);
+				player.TranslatePlayer(p.position, p.moveDir, p.destPoint);
 				player.PlayerId = p.playerId; 
 				_players.Add(p.playerId, player); 
 			}
@@ -68,20 +73,32 @@ public class PlayerManager
 	}
 	public void Move(S_BroadcastMove packet)
 	{
-		 if (_myPlayer.PlayerId == packet.playerId)
+		if (_myPlayer == null) 
+			Debug.Log("ÇÃ·¹À× ¤Ã¾ø´Ù!!");
+
+		if (_myPlayer.PlayerId == packet.playerId)
 		{
-			_myPlayer.transform.position = new Vector3(packet.posX, packet.posY, packet.posZ);
-		} 
+			_myPlayer.TranslatePlayer(packet.position, packet.moveDir, packet.destPoint);
+
+		}
 		else
-		{
+		{ 
 			Player player = null;
 			if (_players.TryGetValue(packet.playerId, out player))
 			{
-				player.transform.position = new Vector3(packet.posX, packet.posY, packet.posZ);
+				player.TranslatePlayer(packet.position, packet.moveDir, packet.destPoint);
+
 			}
-		} 
+		}	
 	}
 	 
+	public void Chat(S_BroadcastChat packet)
+	{
+		if (_uiManager == null) 
+			_uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+		 
+		_uiManager.UpdateChatingText(packet.playerName, packet.ChatText); 
+	}
 	 
 }
  
