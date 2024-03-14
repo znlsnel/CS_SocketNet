@@ -6,7 +6,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-
+ 
 class SessionManager
 {
 	static SessionManager _session = new SessionManager();
@@ -21,14 +21,12 @@ class SessionManager
 		lock (_lock)
 		{ 
 			foreach (ServerSession session in _sessions)
-			{ 
+			{
 				C_Move movePacket = new C_Move();
-				movePacket.posX = _random.Next(-50,50);
-				movePacket.posY = 0;
-				movePacket.posZ = _random.Next(-50, 50);
+				movePacket.position = new vector3() { x = _random.Next(-50, 50), y = 0.0f, z = _random.Next(-50, 50) };
 				session.Send(movePacket.Write());
 			} 
-		}
+		} 
 	} 
 	public ServerSession Generate(string name = "")
 	{

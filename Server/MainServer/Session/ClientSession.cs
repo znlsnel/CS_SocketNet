@@ -11,11 +11,12 @@ public class ClientSession : PacketSession
 {
 public int SessionId { get; set; }
 public GameRoom Room { get; set; }
-public float PosX { get; set; }
-public float PosY { get; set; }
-public float PosZ { get; set; }
-                 
-static int serverCount = 0;
+public vector3 position { get; set; } = new vector3();
+public vector3 moveDir { get; set; } = new vector3();
+	public vector3 destPoint { get; set; } = new vector3();
+
+         
+	static int serverCount = 0;
 public override void OnConnected(EndPoint endPoint)
 {
         Console.WriteLine($"OnConnected : {endPoint}");

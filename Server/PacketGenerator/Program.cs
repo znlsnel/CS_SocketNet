@@ -150,7 +150,12 @@ namespace PacketGenerator
 						readCode += st.Item2;
 						writeCode += st.Item3;   
 						break;
-					default:
+					case "vector3": 
+						memberCode += string.Format(PacketFormat.memberClassFormat, memberType, memberName);
+						readCode += string.Format(PacketFormat.readVector3Format, memberName); 
+						writeCode += string.Format(PacketFormat.writeVector3Format, memberName);
+						break;
+					default: 
 						break;
 						
 				} 
@@ -205,8 +210,8 @@ namespace PacketGenerator
 
 			Tuple<string, string, string> t = ParseMembers(r);
 			string memberCode = string.Format(
-				PacketFormat.memberListFormat,
-				FirstCharToUpper(listName),
+				PacketFormat.memberStructFormat,
+				FirstCharToUpper(listName), 
 				FirstCharToLower(listName),
 				t.Item1, t.Item2, t.Item3);
 

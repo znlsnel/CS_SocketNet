@@ -105,10 +105,10 @@ public class AnimationController : MonoBehaviour
                 return true;
 
 	}
-
+         
         void SetAnimation()
         {
-                float blendSpeed = 0.3f;
+                float blendSpeed = 0.2f;
 		switch (_animState)
                 { 
                         case AnimState.Idle:

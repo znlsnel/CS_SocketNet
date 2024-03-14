@@ -10,7 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 public enum PacketId
-{	S_BroadcastEnterGame = 1,	C_LeaveGame = 2,	S_BroadcastLeaveGame = 3,	S_PlayerList = 4,	C_Move = 5, 	S_BroadcastMove = 6,
+{
+		S_BroadcastEnterGame = 1,	C_LeaveGame = 2,	S_BroadcastLeaveGame = 3,	S_PlayerList = 4,	C_Move = 5,	S_BroadcastMove = 6,
+ 
 }
 
 public interface IPacket
@@ -24,9 +26,9 @@ public interface IPacket
 public class S_BroadcastEnterGame : IPacket
 {    
 	public int playerId;
-	public float posX;
-	public float posY;
-	public float posZ; 
+	public vector3 position { get; set; } = new vector3();
+	public vector3 moveDir { get; set; } = new vector3();
+	public vector3 destPoint { get; set; } = new vector3(); 
 
 	public ushort Protocol { get { return (ushort)PacketId.S_BroadcastEnterGame; } }
  
@@ -42,16 +44,28 @@ public class S_BroadcastEnterGame : IPacket
 		count += sizeof(int);
 		
 		 				
-		posX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		position.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		position.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		position.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float); 
 		
 		 				
-		posY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		moveDir.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		moveDir.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		moveDir.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float); 
 		
 		 				
-		posZ = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		destPoint.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		destPoint.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		destPoint.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float); 
 		
 	}
 
@@ -72,16 +86,28 @@ public class S_BroadcastEnterGame : IPacket
 		count += sizeof(int);   
 		
 		
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posX);
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.x);
 		count += sizeof(float);   
-		
-		
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posY);
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.y);
 		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.z);
+		count += sizeof(float);    
 		
 		
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posZ);
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.x);
 		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.y);
+		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.z);
+		count += sizeof(float);    
+		
+		
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.x);
+		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.y);
+		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.z);
+		count += sizeof(float);    
 		
  
 		success &= BitConverter.TryWriteBytes(s, count);
@@ -187,9 +213,9 @@ public class S_PlayerList : IPacket
 	{  
 		public bool isSelf;
 		public int playerId;
-		public float posX;
-		public float posY;
-		public float posZ;
+		public vector3 position { get; set; } = new vector3();
+		public vector3 moveDir { get; set; } = new vector3();
+		public vector3 destPoint { get; set; } = new vector3();
 	 
 		public void Read(ReadOnlySpan<byte> s, ref ushort count)
 		{ 
@@ -202,16 +228,28 @@ public class S_PlayerList : IPacket
 			count += sizeof(int);
 			
 			 				
-			posX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			position.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 			count += sizeof(float);
+			position.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			count += sizeof(float);
+			position.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			count += sizeof(float); 
 			
 			 				
-			posY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			moveDir.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 			count += sizeof(float);
+			moveDir.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			count += sizeof(float);
+			moveDir.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			count += sizeof(float); 
 			
 			 				
-			posZ = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			destPoint.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 			count += sizeof(float);
+			destPoint.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			count += sizeof(float);
+			destPoint.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+			count += sizeof(float); 
 			
 		}  
 	
@@ -227,16 +265,28 @@ public class S_PlayerList : IPacket
 			count += sizeof(int);   
 			
 			
-			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posX);
+			 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.x);
 			count += sizeof(float);   
-			
-			
-			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posY);
+			 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.y);
 			count += sizeof(float);   
+			 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.z);
+			count += sizeof(float);    
 			
 			
-			success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posZ);
+			 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.x);
 			count += sizeof(float);   
+			 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.y);
+			count += sizeof(float);   
+			 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.z);
+			count += sizeof(float);    
+			
+			
+			 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.x);
+			count += sizeof(float);   
+			 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.y);
+			count += sizeof(float);   
+			 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.z);
+			count += sizeof(float);    
 			
 					   
 			return success;
@@ -303,9 +353,9 @@ public class S_PlayerList : IPacket
  
 public class C_Move : IPacket
 {    
-	public float posX;
-	public float posY;
-	public float posZ; 
+	public vector3 position { get; set; } = new vector3();
+	public vector3 moveDir { get; set; } = new vector3();
+	public vector3 destPoint { get; set; } = new vector3(); 
 
 	public ushort Protocol { get { return (ushort)PacketId.C_Move; } }
  
@@ -317,16 +367,28 @@ public class C_Move : IPacket
 		count += sizeof(ushort);
 		
 		 				
-		posX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		position.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		position.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		position.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float); 
 		
 		 				
-		posY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		moveDir.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		moveDir.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		moveDir.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float); 
 		
 		 				
-		posZ = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		destPoint.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		destPoint.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		destPoint.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float); 
 		
 	}
 
@@ -343,16 +405,28 @@ public class C_Move : IPacket
 		count += sizeof(ushort);
 
 		
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posX);
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.x);
 		count += sizeof(float);   
-		
-		
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posY);
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.y);
 		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.z);
+		count += sizeof(float);    
 		
 		
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posZ);
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.x);
 		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.y);
+		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.z);
+		count += sizeof(float);    
+		
+		
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.x);
+		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.y);
+		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.z);
+		count += sizeof(float);    
 		
  
 		success &= BitConverter.TryWriteBytes(s, count);
@@ -368,9 +442,9 @@ public class C_Move : IPacket
 public class S_BroadcastMove : IPacket
 {    
 	public int playerId;
-	public float posX;
-	public float posY;
-	public float posZ; 
+	public vector3 position { get; set; } = new vector3();
+	public vector3 moveDir { get; set; } = new vector3();
+	public vector3 destPoint { get; set; } = new vector3(); 
 
 	public ushort Protocol { get { return (ushort)PacketId.S_BroadcastMove; } }
  
@@ -386,16 +460,28 @@ public class S_BroadcastMove : IPacket
 		count += sizeof(int);
 		
 		 				
-		posX = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		position.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		position.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		position.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float); 
 		
 		 				
-		posY = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		moveDir.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		moveDir.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		moveDir.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float); 
 		
 		 				
-		posZ = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		destPoint.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
 		count += sizeof(float);
+		destPoint.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float);
+		destPoint.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+		count += sizeof(float); 
 		
 	}
 
@@ -416,16 +502,28 @@ public class S_BroadcastMove : IPacket
 		count += sizeof(int);   
 		
 		
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posX);
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.x);
 		count += sizeof(float);   
-		
-		
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posY);
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.y);
 		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.position.z);
+		count += sizeof(float);    
 		
 		
-		success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.posZ);
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.x);
 		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.y);
+		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.moveDir.z);
+		count += sizeof(float);    
+		
+		
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.x);
+		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.y);
+		count += sizeof(float);   
+		 success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.destPoint.z);
+		count += sizeof(float);    
 		
  
 		success &= BitConverter.TryWriteBytes(s, count);

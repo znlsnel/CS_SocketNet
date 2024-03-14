@@ -19,7 +19,13 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
- 
+  
+public class vector3
+{{ 
+	public float x = 0.0f;
+	public float y = 0.0f; 
+	public float z = 0.0f;
+}} 
 
 public class PacketManager
 {{
@@ -181,6 +187,10 @@ public class {0} : IPacket
 		public static string memberFormat =
 @"public {0} {1};";
 
+		public static string memberClassFormat =
+@"public {0} {1} {{ get; set; }} = new {0}();"; 
+
+
 		// {0} 리스트 이름 [대문자]
 		// {1} 리스트 이름 [소문자]
 		// {2} 맴버 변수들
@@ -215,7 +225,7 @@ public static string memberStructFormat =
 @"   
 public class {0}
 {{  
-	{2}
+	{2} 
  
 	public void Read(ReadOnlySpan<byte> s, ref ushort count)
 	{{ 
@@ -242,7 +252,16 @@ public {0} {1} = new {0}();
 {0} = BitConverter.{1}(s.Slice(count, s.Length - count));
 count += sizeof({2});
 ";
-		
+		// {0} 변수 이름
+		public static string readVector3Format =
+@" 				
+{0}.x = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+count += sizeof(float);
+{0}.y = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+count += sizeof(float);
+{0}.z = BitConverter.ToSingle(s.Slice(count, s.Length - count));
+count += sizeof(float); 
+";
 
 
 		// 이름
@@ -320,6 +339,17 @@ foreach ({0} {1} in this.{1}s)
 		public static string writeStructFormat =
 @"
 success &= {0}.Write(s, ref count); 
+";
+		 
+
+		public static string writeVector3Format =
+@"
+ success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.{0}.x);
+count += sizeof(float);   
+ success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.{0}.y);
+count += sizeof(float);   
+ success &= BitConverter.TryWriteBytes(s.Slice(count, s.Length - count), this.{0}.z);
+count += sizeof(float);    
 ";
 	}
 }

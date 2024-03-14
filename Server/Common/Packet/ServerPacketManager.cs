@@ -6,7 +6,13 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
- 
+  
+public class vector3
+{ 
+	public float x = 0.0f;
+	public float y = 0.0f; 
+	public float z = 0.0f;
+} 
 
 public class PacketManager
 {

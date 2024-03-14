@@ -26,10 +26,10 @@ class PacketHandler
 		C_Move movePacket = packet as C_Move;
 		ClientSession clientSession = session as ClientSession;
 		 
-		Console.WriteLine($"Pos : {movePacket.posX}, {movePacket.posY}, {movePacket.posZ}");
+		Console.WriteLine($"Pos : {movePacket.position.x}, {movePacket.position.y}, {movePacket.position.z}");
 		if (clientSession.Room == null)
 			return;   
-		   
+		    
 		GameRoom room = clientSession.Room;
 		room.Push(() => room.Move(clientSession, movePacket));
 	}  

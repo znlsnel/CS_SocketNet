@@ -45,9 +45,9 @@ public class GameRoom : IJobQueue
 			{
 				isSelf = (s == session),
 				playerId = s.SessionId,
-				posX = s.PosX,
-				posY = s.PosY,
-				posZ = s.PosZ,
+				position = s.position,
+				moveDir = s.moveDir,
+				destPoint = s.destPoint,
 			});
 		}
 			 
@@ -56,9 +56,10 @@ public class GameRoom : IJobQueue
 
 		S_BroadcastEnterGame enter = new S_BroadcastEnterGame();
 		enter.playerId = session.SessionId;
-		enter.posX = 0;
-		enter.posY = 0;
-		enter.posZ = 0;
+		enter.position = new vector3();
+		enter.moveDir = new vector3();
+		enter.destPoint= new vector3();
+		 
 
 		Broadcast(enter.Write());
 			 
@@ -76,9 +77,8 @@ public class GameRoom : IJobQueue
 	{
 		S_BroadcastMove move = new S_BroadcastMove();
 		move.playerId = session.SessionId;
-		move.posX = packet.posX;
-		move.posY = packet.posY;
-		move.posZ = packet.posZ;
+		move.position= packet.position;
+
 		 
 		Broadcast(move.Write());  
 	}
