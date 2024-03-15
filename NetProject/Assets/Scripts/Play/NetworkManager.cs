@@ -41,7 +41,8 @@ public class NetworkManager : MonoBehaviour
 		List<IPacket> packetList = PacketQueue.Instance.PopAll();
 		
 		foreach(IPacket packet in packetList)
-				PacketManager.Instance.HandlePacket(_session, packet);
+				PacketManager.Instance.HandlePacket(_session, packet); 
 	} 
 	  
 }
+

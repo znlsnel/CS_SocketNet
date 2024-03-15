@@ -13,10 +13,9 @@ public class PlayerManager
 
 	public void EnterGame(S_BroadcastEnterGame packet)
 	{
-		if (_myPlayer == null)
-			return;
+		Debug.Log("EnterGame!"); 
 
-		if (_myPlayer.PlayerId == packet.playerId) return;
+		if (_myPlayer &&_myPlayer.PlayerId == packet.playerId) return;
 		 
 		Object obj = Resources.Load("Character_1");
 		GameObject go = Object.Instantiate(obj) as GameObject;
@@ -74,9 +73,9 @@ public class PlayerManager
 	public void Move(S_BroadcastMove packet)
 	{
 		if (_myPlayer == null) 
-			Debug.Log("ÇÃ·¹À× ¤Ã¾ø´Ù!!");
-
-		if (_myPlayer.PlayerId == packet.playerId)
+			Debug.Log("ÇÃ·¹À× ¤Ã¾ø´Ù!!"); 
+		 
+		if (_myPlayer && _myPlayer.PlayerId == packet.playerId)
 		{
 			_myPlayer.TranslatePlayer(packet.position, packet.moveDir, packet.destPoint);
 

@@ -7,6 +7,7 @@ public class AnimationController : MonoBehaviour
 {
         // Start is called before the first frame update
         Animator _animator;
+        [SerializeField] Animator _armorAnimator;
         AnimState _animState = AnimState.Idle;
         AnimState _prevAnimState = AnimState.Idle;
 
@@ -39,19 +40,19 @@ public class AnimationController : MonoBehaviour
     }
          
     // Update is called once per frame
-    void Update()
+    void Update() 
     {
-                if (UpdateAnimation())
-			SetAnimation();
+                if (UpdateAnimation()) 
+                        SetAnimation();
 
-    }
+        }
 
         public void SetDir(Vector3 moveDir, Vector3 lookDir)
         {
                 _moveDir = moveDir;
                 _lookDir = lookDir;
         }
-
+         
         bool UpdateAnimation()
         {
                 if (_animator == null) return false;
@@ -112,33 +113,42 @@ public class AnimationController : MonoBehaviour
 		switch (_animState)
                 { 
                         case AnimState.Idle:
-                                _animator.CrossFade("Idle", blendSpeed); 
+                                _animator.CrossFade("Idle", blendSpeed);
+				_armorAnimator.CrossFade("Idle", blendSpeed); 
                                 break;
 			case AnimState.RunForward:
-                                _animator.CrossFade("RunForward", blendSpeed); 
+                                _animator.CrossFade("RunForward", blendSpeed);
+				_armorAnimator.CrossFade("RunForward", blendSpeed); 
 				break;
 			case AnimState.RunLeft:
-                                _animator.CrossFade("RunLeft", blendSpeed); 
+                                _animator.CrossFade("RunLeft", blendSpeed);
+				_armorAnimator.CrossFade("RunLeft", blendSpeed); 
 				break;
 			case AnimState.RunRight:
-                                _animator.CrossFade("RunRight", blendSpeed); 
+                                _animator.CrossFade("RunRight", blendSpeed);
+				_armorAnimator.CrossFade("RunRight", blendSpeed); 
 				break;
 			case AnimState.RunBackward:
-                                _animator.CrossFade("RunBackward", blendSpeed); 
+                                _animator.CrossFade("RunBackward", blendSpeed);
+				_armorAnimator.CrossFade("RunBackward", blendSpeed); 
 				break;
 			case AnimState.RunBackwardLeft:
-                                _animator.CrossFade("RunBackwardLeft", blendSpeed); 
+                                _animator.CrossFade("RunBackwardLeft", blendSpeed);
+				_armorAnimator.CrossFade("RunBackwardLeft", blendSpeed); 
 				break;
 			case AnimState.RunBackwardRight:
-                                _animator.CrossFade("RunBackwardRight", blendSpeed); 
+                                _animator.CrossFade("RunBackwardRight", blendSpeed);
+				_armorAnimator.CrossFade("RunBackwardRight", blendSpeed); 
 				break;
 			case AnimState.StrafeLeft:
-                                _animator.CrossFade("StrafeLeft", blendSpeed); 
+                                _animator.CrossFade("StrafeLeft", blendSpeed);
+				_armorAnimator.CrossFade("StrafeLeft", blendSpeed); 
 				break;
 			case AnimState.StrafeRight:
-                                _animator.CrossFade("StrafeRight", blendSpeed); 
+                                _animator.CrossFade("StrafeRight", blendSpeed);
+				_armorAnimator.CrossFade("StrafeRight", blendSpeed); 
 				break;
-
+                                 
 		}
                 _prevAnimState = _animState;
 

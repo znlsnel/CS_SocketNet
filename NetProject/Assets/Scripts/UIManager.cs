@@ -64,9 +64,9 @@ public class UIManager : MonoBehaviour
 		chat.playerName = PlayerName;
 		chat.ChatText = _InputChat.text;
 		_networkManager.Send(chat.Write());
-		 
+		  
 		_InputChat.text = ""; 
-	}
+	} 
 	
 	public void UpdateChatingText(string name , string text)
 	{

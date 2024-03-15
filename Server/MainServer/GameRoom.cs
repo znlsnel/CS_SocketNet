@@ -17,7 +17,7 @@ public class GameRoom : IJobQueue
 		_jobQueue.Push(job);
 	}
 
-	public void Flush()
+	public void Flush() 
 	{
 		foreach (ClientSession s in _sessions)
 			s.Send(_pendingList);
