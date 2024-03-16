@@ -64,17 +64,20 @@ public class UIManager : MonoBehaviour
 		chat.playerName = PlayerName;
 		chat.ChatText = _InputChat.text;
 		_networkManager.Send(chat.Write());
-		  
-		_InputChat.text = ""; 
+
+		_InputChat.text = "";
+		_InputChat.Select();
+		_InputChat.ActivateInputField();
 	} 
 	
 	public void UpdateChatingText(string name , string text)
 	{
 		Queue<string> tempChat = new Queue<string>();
-		_chating.Dequeue();   
+		//text = text.ToString().Substring(0, 10); 
+		_chating.Dequeue();    
 		_chating.Enqueue($"[{name}] : {text}");
 
-		_ChatText.text = ""; 
+		_ChatText.text = "";
 		foreach (string txt in _chating)
 		{
 			_ChatText.text += txt + "\n"; 

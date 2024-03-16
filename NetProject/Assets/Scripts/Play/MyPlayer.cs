@@ -25,14 +25,9 @@ public class MyPlayer : Player
     // Update is called once per frame 
 	void Update()
 	{
-
-	}
-
-	void FixedUpdate() 
-	{
 		Vector3 moveDir;
 		Vector3 lookPoint;
-
+		 
 		GetMoveLookDir(out moveDir, out lookPoint);
 
 		C_Move move = new C_Move();
@@ -40,10 +35,13 @@ public class MyPlayer : Player
 		move.destPoint = Utills.MakeVector3(lookPoint);
 		move.moveDir = Utills.MakeVector3(moveDir);
 		_network.Send(move.Write());
-
-		UpdatePosition();
-
 	}
+
+	void FixedUpdate()
+	{
+		UpdatePosition();
+	}
+
 	void GetMoveLookDir(out  Vector3 moveDir, out Vector3 lookPoint)
         {
 		float horizontal = Input.GetAxis("Horizontal");
@@ -55,10 +53,11 @@ public class MyPlayer : Player
 		camUp.y = 0;
 		camRight.y = 0;
 		camUp.Normalize();
-		camRight.Normalize();
-
+		camRight.Normalize(); 
+		 
 		moveDir = (camUp * vertical + camRight * horizontal);
 		moveDir.Normalize();
+		// Debug.Log($"move Dir : {moveDir.x},  {moveDir.y} ,  {moveDir.z}");
 
 
 

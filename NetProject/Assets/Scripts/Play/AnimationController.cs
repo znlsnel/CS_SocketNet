@@ -25,7 +25,7 @@ public class AnimationController : MonoBehaviour
                 StrafeRight = 5,
                 RunBackward = 6,
                 RunBackwardLeft = 7,
-                RunBackwardRight = 8,
+                RunBackwardRight = 8, 
         }
 
         enum MoveDir
@@ -42,9 +42,8 @@ public class AnimationController : MonoBehaviour
     // Update is called once per frame
     void Update() 
     {
-                if (UpdateAnimation()) 
-                        SetAnimation();
-
+                if (UpdateAnimation())
+                        SetAnimation(); 
         }
 
         public void SetDir(Vector3 moveDir, Vector3 lookDir)
@@ -55,7 +54,8 @@ public class AnimationController : MonoBehaviour
          
         bool UpdateAnimation()
         {
-                if (_animator == null) return false;
+                if (_animator == null) 
+                        return false;
 		// State Check
                   
 		_moveDir.Normalize();
@@ -100,9 +100,9 @@ public class AnimationController : MonoBehaviour
 
         #endregion
 
-        if (_animState == _prevAnimState)
+                if (_animState == _prevAnimState)
                         return false;
-                  
+                   
                 return true;
 
 	}

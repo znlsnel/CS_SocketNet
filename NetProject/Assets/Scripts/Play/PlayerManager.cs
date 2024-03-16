@@ -9,6 +9,7 @@ public class PlayerManager
 	Dictionary<int, Player> _players = new Dictionary<int, Player>();        
 	public static PlayerManager Instnace { get; } = new PlayerManager();
 	UIManager _uiManager;
+	static int _order = 0;
 	// Start is called before the first frame update
 
 	public void EnterGame(S_BroadcastEnterGame packet)
@@ -16,16 +17,18 @@ public class PlayerManager
 		Debug.Log("EnterGame!"); 
 
 		if (_myPlayer &&_myPlayer.PlayerId == packet.playerId) return;
-		 
-		Object obj = Resources.Load("Character_1");
+
+		int number = _order % 3;
+		Object obj = Resources.Load($"Character_{number + 1}"); 
+		_order++;
 		GameObject go = Object.Instantiate(obj) as GameObject;
-		 
+
 		 
 		Player player = go.AddComponent<Player>();
 
-		player.TranslatePlayer(packet.position, packet.moveDir, packet.destPoint);
+		//player.TranslatePlayer(packet.position, packet.moveDir, packet.destPoint);
 
-		_players.Add(packet.playerId, player); 
+		_players.Add(packet.playerId, player);
 	} 
 	public void LeaveGame(S_BroadcastLeaveGame packet) 
 	{
@@ -47,11 +50,15 @@ public class PlayerManager
 	}
 
 	public void Add(S_PlayerList packet)
-	{ 
-		Object obj = Resources.Load("Character_1"); 
+	{
+		Debug.Log("ADD");
 
 		foreach (S_PlayerList.Player p in packet.players)
 		{
+			int number = _order % 3;
+			Object obj = Resources.Load($"Character_{number + 1}");
+			_order++;
+			 
 			GameObject go = Object.Instantiate(obj) as GameObject;
 			if (p.isSelf)
 			{
@@ -59,12 +66,12 @@ public class PlayerManager
 				_myPlayer = myPlayer;
 				_myPlayer.PlayerId = p.playerId; 
 				  
-				_myPlayer.TranslatePlayer(p.position, p.moveDir, p.destPoint);
+				//_myPlayer.TranslatePlayer(p.position, p.moveDir, p.destPoint);
 			} 
 			else
 			{
 				Player player = go.AddComponent<Player>();
-				player.TranslatePlayer(p.position, p.moveDir, p.destPoint);
+				//player.TranslatePlayer(p.position, p.moveDir, p.destPoint);
 				player.PlayerId = p.playerId; 
 				_players.Add(p.playerId, player); 
 			}
@@ -78,7 +85,7 @@ public class PlayerManager
 		if (_myPlayer && _myPlayer.PlayerId == packet.playerId)
 		{
 			_myPlayer.TranslatePlayer(packet.position, packet.moveDir, packet.destPoint);
-
+		 
 		}
 		else
 		{ 

@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
 {
 	public float maxDistance = 1.0f;   
 	public float cameraSpeed = 5.0f;
-	public Vector3 cameraPos = new Vector3(-5.0f, 7.0f, 0.0f);  
+	public Vector3 cameraArmPos = new Vector3(-5.0f, 7.0f, 0.0f);  
 	// Start is called before the first frame update
 	GameObject _player;
         void Start()
@@ -29,18 +29,21 @@ public class CameraController : MonoBehaviour
 		if (_player == null)
 			return;
 
-		Vector3 nextCameraPos = _player.transform.position + cameraPos;
-		Vector3 moveDIr = nextCameraPos - transform.position;
-		float moveDirLength = moveDIr.magnitude;
+		Vector3 nextCameraPos = _player.transform.position + cameraArmPos;
+		transform.position = nextCameraPos;
+		//Vector3 moveDIr = nextCameraPos - transform.position;
+		//float moveDirLength = moveDIr.magnitude;
 
-		if (moveDirLength < 0.1f) return;
-		moveDIr.Normalize();
+		//if (moveDirLength < 0.5f)
+		//	return;
 
-		float speed = cameraSpeed;
-		if (moveDirLength > maxDistance)
-			speed = cameraSpeed + (moveDirLength - maxDistance) * 3;
+		//moveDIr.Normalize();
 
-		transform.Translate(moveDIr * Time.deltaTime * speed, Space.World);
+		//float speed = cameraSpeed;
+		//if (moveDirLength > maxDistance)
+		//	speed = cameraSpeed + (moveDirLength - maxDistance) * 3;
+
+		//transform.Translate(moveDIr * Time.deltaTime * speed, Space.World);
 
 
 	}
@@ -48,7 +51,7 @@ public class CameraController : MonoBehaviour
 	public void InitCamera(GameObject player)
         {
                 _player = player;  
-		transform.position = _player.transform.position + cameraPos;
+		transform.position = _player.transform.position + cameraArmPos;
 		transform.LookAt(_player.transform.position);
 	}
 }
