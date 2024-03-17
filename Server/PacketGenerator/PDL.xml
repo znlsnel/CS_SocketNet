@@ -13,6 +13,31 @@
 		<string name ="ChatText"/>
 	</packet>
  
+	<packet name ="C_AttackRequset">
+		<int name ="playerId"/>
+	</packet>
+	
+	<packet name ="S_BroadcastAttackRequset">
+		<int name ="playerId"/>
+	</packet>
+		 
+	<packet name ="C_Damage">
+		<int name ="attackedPlayerId"/>
+		<int name ="damagedPlayerId"/>
+	</packet>
+		
+	<packet name ="S_BroadcastDamage">
+		<int name ="attackedPlayerId"/>
+		<int name ="damagedPlayerId"/>
+	</packet>
+	
+	<packet name ="S_BroadcastScoreUpdate">
+		<int name ="team1Score"/>
+		<int name ="team2Score"/> 
+		<int name ="team3Score"/>
+	</packet>
+	
+		
 	<packet name ="S_BroadcastChat">
 		<string name ="playerName"/>
 		<string name ="ChatText"/>

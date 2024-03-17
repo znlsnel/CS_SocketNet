@@ -92,4 +92,13 @@ public class GameRoom : IJobQueue
 
 		Broadcast(chat.Write());
 	}
+	 
+	public void Attack(ClientSession session)
+	{
+		S_BroadcastAttackRequset s = new S_BroadcastAttackRequset(); 
+		s.playerId = session.SessionId;
+
+		Broadcast(s.Write());
+	}
+
 }

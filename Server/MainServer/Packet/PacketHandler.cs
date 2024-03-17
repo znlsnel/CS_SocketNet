@@ -1,5 +1,6 @@
 ﻿using ServerCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -20,7 +21,21 @@ class PacketHandler
 		GameRoom room = clientSession.Room; 
 		room.Push(() => room.Leave(clientSession));
 	}
-	
+
+	public static void C_AttackRequsetHandler(PacketSession session, IPacket packet)
+	{
+		ClientSession clientSession = session as ClientSession;
+		if (clientSession.Room == null)
+			return;
+
+		GameRoom room = clientSession.Room; 
+		room.Push(() => room.Attack(clientSession));
+	}
+
+	public static void C_DamageHandler(PacketSession session, IPacket packet)
+	{
+
+	}
 	public static void C_ChatHandler(PacketSession session, IPacket packet)
 	{
 		C_Chat chatPacket = packet as C_Chat;

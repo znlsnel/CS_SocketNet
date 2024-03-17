@@ -12,7 +12,11 @@ using static System.Collections.Specialized.BitVector32;
 public class NetworkManager : MonoBehaviour
 {
 	ServerSession _session = new ServerSession();
-	 
+
+	private void Awake()
+	{
+
+	}
 	public void Send(ArraySegment<byte> data)
 	{
 		_session.Send(data);

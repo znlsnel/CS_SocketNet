@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 public class MyPlayer : Player
 {
-        // Start is called before the first frame update 
+	float _attackCoolTime = 0.5f;
+	float _lastAttackTime = 0.0f;
+	bool _isAttackable = true;
+
+	// Start is called before the first frame update 
 	NetworkManager _network;
 	private void Awake()
 	{
@@ -19,22 +24,28 @@ public class MyPlayer : Player
 
 	}
 	void Start()
-	{     
+	{
+		
 	}
-          
-    // Update is called once per frame 
+
+	// Update is called once per frame 
 	void Update()
 	{
 		Vector3 moveDir;
 		Vector3 lookPoint;
-		 
+
 		GetMoveLookDir(out moveDir, out lookPoint);
 
 		C_Move move = new C_Move();
 		move.position = Utills.MakeVector3(transform.position);
 		move.destPoint = Utills.MakeVector3(lookPoint);
 		move.moveDir = Utills.MakeVector3(moveDir);
+
+		
 		_network.Send(move.Write());
+
+		RequestAttack();
+		UpdateCoolTimes();
 	}
 
 	void FixedUpdate()
@@ -42,8 +53,36 @@ public class MyPlayer : Player
 		UpdatePosition();
 	}
 
-	void GetMoveLookDir(out  Vector3 moveDir, out Vector3 lookPoint)
-        {
+	void UpdateCoolTimes()
+	{
+		if (_isAttackable == false)
+		{
+			_lastAttackTime += Time.deltaTime;
+			if (_lastAttackTime > _attackCoolTime)
+			{
+				_isAttackable = true;
+				_lastAttackTime = 0.0f;
+			}
+		}
+	}
+
+	void RequestAttack() 
+	{ 
+		if (_isAttackable == false) 
+			return;
+
+		if (Input.GetAxis("Fire1") <= 0)
+			return;
+		_isAttackable = false;
+		C_AttackRequset chat = new C_AttackRequset();
+		chat.playerId = PlayerId;
+		_network.Send(chat.Write());
+
+		// send Attack!
+	}
+
+	void GetMoveLookDir(out Vector3 moveDir, out Vector3 lookPoint)
+	{
 		float horizontal = Input.GetAxis("Horizontal");
 		float vertical = Input.GetAxis("Vertical");
 
@@ -53,8 +92,8 @@ public class MyPlayer : Player
 		camUp.y = 0;
 		camRight.y = 0;
 		camUp.Normalize();
-		camRight.Normalize(); 
-		 
+		camRight.Normalize();
+
 		moveDir = (camUp * vertical + camRight * horizontal);
 		moveDir.Normalize();
 		// Debug.Log($"move Dir : {moveDir.x},  {moveDir.y} ,  {moveDir.z}");
@@ -79,6 +118,19 @@ public class MyPlayer : Player
 		point.y = transform.position.y;
 		lookPoint = point;
 	}
-	 
-	
+
+	public override void OnHit()
+	{
+		if (_hp <= 0) return;
+
+		_hp--;
+		if (_hp == 0)
+		{
+			_animCtrl._isDeath = true;
+				_scene._uiManger._respawnManager.OnDie(this);
+		}
+	}
+
+
+
 }

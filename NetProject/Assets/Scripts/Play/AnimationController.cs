@@ -6,16 +6,23 @@ using UnityEngine;
 public class AnimationController : MonoBehaviour
 {
         // Start is called before the first frame update
-        Animator _animator;
-        [SerializeField] Animator _armorAnimator;
+        Player _player;
+        public Animator _animator;
         AnimState _animState = AnimState.Idle;
         AnimState _prevAnimState = AnimState.Idle;
 
         Vector3 _moveDir = Vector3.zero;
         Vector3 _lookDir = Vector3.zero;
-          
 
-        enum AnimState
+        private int _upperBodyLayerIndex = -1;
+        private int _additiveLayerIndex = -1;
+
+        public bool _isGetHit = false;
+	public bool _isPunching = false;
+	public bool _isDeath = false;
+        Transform handTransform;
+
+	enum AnimState
         {
                 Idle = 0,
                 RunForward = 1,
@@ -26,6 +33,8 @@ public class AnimationController : MonoBehaviour
                 RunBackward = 6,
                 RunBackwardLeft = 7,
                 RunBackwardRight = 8, 
+                Death = 9,
+                Spawn = 10,
         }
 
         enum MoveDir
@@ -35,15 +44,23 @@ public class AnimationController : MonoBehaviour
 
     void Start()
     {
-        _animator = GetComponent<Animator>();
+                 _animator = GetComponent<Animator>();
+                _player = gameObject.GetComponent<Player>(); 
                 _animState = AnimState.RunBackward;
-    }
-         
-    // Update is called once per frame
-    void Update() 
+
+		_upperBodyLayerIndex = _animator.GetLayerIndex("UpperBody Layer");
+                _additiveLayerIndex = _animator.GetLayerIndex("Additive Layer");
+		handTransform = _animator.GetBoneTransform(HumanBodyBones.RightHand);
+
+		//_animState = AnimState.Death;
+	}
+
+	// Update is called once per frame
+	void Update() 
     {
-                if (UpdateAnimation())
-                        SetAnimation(); 
+                UpdateAnimation();
+		if (_animState != _prevAnimState)
+                        SetAnimation();  
         }
 
         public void SetDir(Vector3 moveDir, Vector3 lookDir)
@@ -51,23 +68,51 @@ public class AnimationController : MonoBehaviour
                 _moveDir = moveDir;
                 _lookDir = lookDir;
         }
+          
+        void Event_OnDiePose()
+        { 
+                _animator.speed = 0.0f;
+                 
+	} 
+
+
+
+	void Event_OnAttack()
+	{
+		GameObject fireObj = _player.GetFireObject();
+		FireManager fireM = fireObj.GetComponent<FireManager>();
+                Vector3 fireDir = (_player._lookPoint - handTransform.position);
+                fireDir.y = 0;
+                fireDir.Normalize();
+
+		fireM.Fire(_player.PlayerId, handTransform.position, fireDir);
+                //_animator.SetLayerWeight(_upperBodyLayerIndex, 0.0f);
+	}  
          
-        bool UpdateAnimation()
+	void UpdateAnimation()
         {
                 if (_animator == null) 
-                        return false;
+                        return;
 		// State Check
                   
-		_moveDir.Normalize();
+		_moveDir.Normalize(); 
 		_lookDir.Normalize();
 		Vector3 rightDir = Vector3.Cross(new Vector3(0.0f, 1.0f, 0.0f), _lookDir);
 
 		float forwardRate = Vector3.Dot(_moveDir, _lookDir);
 		float rightStrafeRate = Vector3.Dot(_moveDir, rightDir);
+
                  
+
+                if (_isDeath)
+                {
+                        _animState = AnimState.Death;
+                        return;
+                }
+
 		#region SetAnimState
-                 
-                int forward = forwardRate > 0.5 ? 1 : forwardRate < -0.5 ? -1 : 0; 
+
+		int forward = forwardRate > 0.5 ? 1 : forwardRate < -0.5 ? -1 : 0; 
                 int right = rightStrafeRate > 0.5 ? 1 : rightStrafeRate < -0.5 ? -1 : 0; 
                   
 		if (forward == 1)
@@ -100,55 +145,60 @@ public class AnimationController : MonoBehaviour
 
         #endregion
 
-                if (_animState == _prevAnimState)
-                        return false;
-                   
-                return true;
-
+	}
+         void PlayAnimation(string animName, float blendSpeed)
+        {
+		_animator.CrossFade(animName, blendSpeed);
+	//	_armorAnimator.CrossFade(animName, blendSpeed);
 	}
          
-        void SetAnimation()
+        public void PlayAttackAnimatio()
         {
+               _animator.SetLayerWeight(_upperBodyLayerIndex, 1.0f); 
+		_animator.Play("PunchLeft"); 
+                 
+	}
+
+	void SetAnimation()
+        {
+
                 float blendSpeed = 0.2f;
 		switch (_animState)
                 { 
                         case AnimState.Idle:
-                                _animator.CrossFade("Idle", blendSpeed);
-				_armorAnimator.CrossFade("Idle", blendSpeed); 
+				PlayAnimation("Idle", blendSpeed);
                                 break;
 			case AnimState.RunForward:
-                                _animator.CrossFade("RunForward", blendSpeed);
-				_armorAnimator.CrossFade("RunForward", blendSpeed); 
+				PlayAnimation("RunForward", blendSpeed);
 				break;
 			case AnimState.RunLeft:
-                                _animator.CrossFade("RunLeft", blendSpeed);
-				_armorAnimator.CrossFade("RunLeft", blendSpeed); 
+				PlayAnimation("RunLeft", blendSpeed);
 				break;
 			case AnimState.RunRight:
-                                _animator.CrossFade("RunRight", blendSpeed);
-				_armorAnimator.CrossFade("RunRight", blendSpeed); 
+				PlayAnimation("RunRight", blendSpeed);
 				break;
 			case AnimState.RunBackward:
-                                _animator.CrossFade("RunBackward", blendSpeed);
-				_armorAnimator.CrossFade("RunBackward", blendSpeed); 
+				PlayAnimation("RunBackward", blendSpeed);
 				break;
 			case AnimState.RunBackwardLeft:
-                                _animator.CrossFade("RunBackwardLeft", blendSpeed);
-				_armorAnimator.CrossFade("RunBackwardLeft", blendSpeed); 
+				PlayAnimation("RunBackwardLeft", blendSpeed);
 				break;
 			case AnimState.RunBackwardRight:
-                                _animator.CrossFade("RunBackwardRight", blendSpeed);
-				_armorAnimator.CrossFade("RunBackwardRight", blendSpeed); 
+				PlayAnimation("RunBackwardRight", blendSpeed);
 				break;
 			case AnimState.StrafeLeft:
-                                _animator.CrossFade("StrafeLeft", blendSpeed);
-				_armorAnimator.CrossFade("StrafeLeft", blendSpeed); 
+                                PlayAnimation("StrafeLeft", blendSpeed);
 				break;
 			case AnimState.StrafeRight:
-                                _animator.CrossFade("StrafeRight", blendSpeed);
-				_armorAnimator.CrossFade("StrafeRight", blendSpeed); 
+                                PlayAnimation("StrafeRight", blendSpeed);
 				break;
-                                 
+                        case AnimState.Death:
+                                PlayAnimation("Death", blendSpeed);
+                                break; 
+			case AnimState.Spawn:
+				PlayAnimation("Spawn", blendSpeed);
+				break;
+
 		}
                 _prevAnimState = _animState;
 

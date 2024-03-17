@@ -18,6 +18,21 @@ class PacketHandler
 
 		PlayerManager.Instnace.EnterGame(pkt); 
 	}
+	public static void S_BroadcastDamageHandler(PacketSession session, IPacket packet)
+	{
+	}
+
+	public static void S_BroadcastScoreUpdateHandler(PacketSession session, IPacket packet)
+	{
+	}
+
+	public static void S_BroadcastAttackRequsetHandler(PacketSession session, IPacket packet)
+	{
+		S_BroadcastAttackRequset pkt = packet as S_BroadcastAttackRequset;
+		ServerSession serverSession = session as ServerSession;
+
+		PlayerManager.Instnace.RequestAttack(pkt);
+	}
 
 	public static void S_BroadcastChatHandler(PacketSession session, IPacket packet)
 	{

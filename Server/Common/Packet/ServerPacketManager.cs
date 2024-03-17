@@ -39,6 +39,14 @@ public class PacketManager
 			_handler.Add((ushort)PacketId.C_Chat, PacketHandler.C_ChatHandler); 
 
 
+			_makeFunc.Add((ushort)PacketId.C_AttackRequset, MakePacket<C_AttackRequset>); 
+			_handler.Add((ushort)PacketId.C_AttackRequset, PacketHandler.C_AttackRequsetHandler); 
+
+
+			_makeFunc.Add((ushort)PacketId.C_Damage, MakePacket<C_Damage>); 
+			_handler.Add((ushort)PacketId.C_Damage, PacketHandler.C_DamageHandler); 
+
+
 			_makeFunc.Add((ushort)PacketId.C_LeaveGame, MakePacket<C_LeaveGame>); 
 			_handler.Add((ushort)PacketId.C_LeaveGame, PacketHandler.C_LeaveGameHandler); 
 

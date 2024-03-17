@@ -39,6 +39,18 @@ public class PacketManager
 			_handler.Add((ushort)PacketId.S_BroadcastEnterGame, PacketHandler.S_BroadcastEnterGameHandler); 
 
 
+			_makeFunc.Add((ushort)PacketId.S_BroadcastAttackRequset, MakePacket<S_BroadcastAttackRequset>); 
+			_handler.Add((ushort)PacketId.S_BroadcastAttackRequset, PacketHandler.S_BroadcastAttackRequsetHandler); 
+
+
+			_makeFunc.Add((ushort)PacketId.S_BroadcastDamage, MakePacket<S_BroadcastDamage>); 
+			_handler.Add((ushort)PacketId.S_BroadcastDamage, PacketHandler.S_BroadcastDamageHandler); 
+
+
+			_makeFunc.Add((ushort)PacketId.S_BroadcastScoreUpdate, MakePacket<S_BroadcastScoreUpdate>); 
+			_handler.Add((ushort)PacketId.S_BroadcastScoreUpdate, PacketHandler.S_BroadcastScoreUpdateHandler); 
+
+
 			_makeFunc.Add((ushort)PacketId.S_BroadcastChat, MakePacket<S_BroadcastChat>); 
 			_handler.Add((ushort)PacketId.S_BroadcastChat, PacketHandler.S_BroadcastChatHandler); 
 

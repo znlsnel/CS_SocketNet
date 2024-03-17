@@ -64,8 +64,8 @@ public class PlayerManager
 			{
 				MyPlayer myPlayer = go.AddComponent<MyPlayer>();
 				_myPlayer = myPlayer;
-				_myPlayer.PlayerId = p.playerId; 
-				  
+				_myPlayer.PlayerId = p.playerId;
+				_players.Add(_myPlayer.PlayerId, _myPlayer); 
 				//_myPlayer.TranslatePlayer(p.position, p.moveDir, p.destPoint);
 			} 
 			else
@@ -105,6 +105,15 @@ public class PlayerManager
 		 
 		_uiManager.UpdateChatingText(packet.playerName, packet.ChatText); 
 	}
-	 
+
+	public void RequestAttack(S_BroadcastAttackRequset packet)
+	{
+		Player player;
+		if (_players.TryGetValue(packet.playerId, out player))
+		{
+			player.OnAttack();
+		}
+		
+	}
 }
  
