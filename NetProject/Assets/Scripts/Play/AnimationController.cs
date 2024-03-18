@@ -20,7 +20,6 @@ public class AnimationController : MonoBehaviour
         public bool _isGetHit = false;
 	public bool _isPunching = false;
 	public bool _isDeath = false;
-        Transform handTransform;
 
 	enum AnimState
         {
@@ -50,7 +49,6 @@ public class AnimationController : MonoBehaviour
 
 		_upperBodyLayerIndex = _animator.GetLayerIndex("UpperBody Layer");
                 _additiveLayerIndex = _animator.GetLayerIndex("Additive Layer");
-		handTransform = _animator.GetBoneTransform(HumanBodyBones.RightHand);
 
 		//_animState = AnimState.Death;
 	}
@@ -79,15 +77,15 @@ public class AnimationController : MonoBehaviour
 
 	void Event_OnAttack()
 	{
-		GameObject fireObj = _player.GetFireObject();
-		FireManager fireM = fireObj.GetComponent<FireManager>();
-                Vector3 fireDir = (_player._lookPoint - handTransform.position);
-                fireDir.y = 0;
-                fireDir.Normalize();
+                MyPlayer p = _player as MyPlayer;
+                if (p == null) return;
 
-		fireM.Fire(_player.PlayerId, handTransform.position, fireDir);
-                //_animator.SetLayerWeight(_upperBodyLayerIndex, 0.0f);
-	}  
+                C_FireObjIdxRequest chat = new C_FireObjIdxRequest();
+                chat.requestedPlayerId = p.PlayerId; 
+                p._network.Send(chat.Write());
+        }  
+
+
          
 	void UpdateAnimation()
         {
@@ -144,7 +142,7 @@ public class AnimationController : MonoBehaviour
 		}
 
         #endregion
-
+                 
 	}
          void PlayAnimation(string animName, float blendSpeed)
         {

@@ -14,18 +14,26 @@ class PacketHandler
 		S_BroadcastEnterGame pkt = packet as S_BroadcastEnterGame;
 		ServerSession serverSession = session as ServerSession;
 	}
-	
 
-	public static void S_BroadcastAttackRequsetHandler(PacketSession session, IPacket packet)
+	public static void S_BroadcastAttackHandler(PacketSession session, IPacket packet)
 	{
 
 	}
-	
+	public static void S_BroadcastFireObjIdxHandler(PacketSession session, IPacket packet)
+	{
+
+	}
+
+	public static void S_BroadcastHandler(PacketSession session, IPacket packet)
+	{
+
+	}
+
 	public static void S_BroadcastDamageHandler(PacketSession session, IPacket packet)
 	{
 
 	}
-	public static void S_BroadcastScoreUpdateHandler(PacketSession session, IPacket packet)
+	public static void S_BroadcastUpdateScoreHandler(PacketSession session, IPacket packet)
 	{
 
 	}

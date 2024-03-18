@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Accessibility;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI; 
 
 public class UIManager : MonoBehaviour
@@ -20,13 +21,14 @@ public class UIManager : MonoBehaviour
 	[SerializeField] private Text _ChatText;
 
 	public RespawnUI _respawnManager;
-
+	public ScoreManager _scoreManager;
+	
 	NetworkManager _networkManager;
 
 	Queue<string> _chating = new Queue<string>();
 	 
 	string PlayerName;
-
+	public MyPlayer player;
 
 	// Start is called before the first frame update
 	private void Awake()
@@ -34,12 +36,12 @@ public class UIManager : MonoBehaviour
 		_networkManager = GameObject.Find("NetManager").GetComponent<NetworkManager>();
 
 		_scoreUI = Instantiate(_scoreUI, Vector3.zero, Quaternion.identity);
-		_scoreUI.enabled = false;
 		_respawnUI = Instantiate(_respawnUI, Vector3.zero, Quaternion.identity);
+		//_ChatCanvas = Instantiate(_ChatCanvas, Vector3.zero, Quaternion.identity);
 		_respawnUI.enabled = false; 
-
+		 
 		_respawnManager = _respawnUI.GetComponent<RespawnUI>();
-
+		_scoreManager = _scoreUI.GetComponent<ScoreManager>(); 
 	}
 	void Start()
     { 
@@ -49,7 +51,7 @@ public class UIManager : MonoBehaviour
 
 		_JoinCanvas.enabled = true;
 		_ChatCanvas.enabled = false;
-
+		_InputChat.text = ""; 
 		_ChatText.text = "";
 		for (int i = 0; i < 16; i++)
 		{
@@ -66,6 +68,7 @@ public class UIManager : MonoBehaviour
 		PlayerName = _inputName.text; 
                 _JoinCanvas.enabled = false;  
 		_ChatCanvas.enabled = true;
+		player.isSetName = true;
 	}
 
 	// Update is called once per frame
@@ -78,7 +81,10 @@ public class UIManager : MonoBehaviour
         void CheckEnter()
         {
 		bool isEnter = Input.GetKeyDown(KeyCode.Return);
-		if (isEnter == false || _InputChat.text == "") return;
+		if (isEnter == false) 
+			return;
+		if(_InputChat.text == "") 
+			return;
 
 		C_Chat chat = new C_Chat();
 		chat.playerName = PlayerName;

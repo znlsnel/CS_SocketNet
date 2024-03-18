@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static S_PlayerList;
 
 public class PlayerManager 
@@ -9,8 +10,8 @@ public class PlayerManager
 	Dictionary<int, Player> _players = new Dictionary<int, Player>();        
 	public static PlayerManager Instnace { get; } = new PlayerManager();
 	UIManager _uiManager;
-	static int _order = 0;
-	// Start is called before the first frame update
+
+	public SceneManager _sceneManager;
 
 	public void EnterGame(S_BroadcastEnterGame packet)
 	{
@@ -18,14 +19,14 @@ public class PlayerManager
 
 		if (_myPlayer &&_myPlayer.PlayerId == packet.playerId) return;
 
-		int number = _order % 3;
-		Object obj = Resources.Load($"Character_{number + 1}"); 
-		_order++;
+		Object obj = Resources.Load($"Character_{packet.teamId + 1}");
+		 
 		GameObject go = Object.Instantiate(obj) as GameObject;
 
-		 
+		  
 		Player player = go.AddComponent<Player>();
-
+		player.TeamId = packet.teamId;
+		player.PlayerId = packet.playerId;
 		//player.TranslatePlayer(packet.position, packet.moveDir, packet.destPoint);
 
 		_players.Add(packet.playerId, player);
@@ -55,9 +56,7 @@ public class PlayerManager
 
 		foreach (S_PlayerList.Player p in packet.players)
 		{
-			int number = _order % 3;
-			Object obj = Resources.Load($"Character_{number + 1}");
-			_order++;
+			Object obj = Resources.Load($"Character_{p.teamId + 1}");
 			 
 			GameObject go = Object.Instantiate(obj) as GameObject;
 			if (p.isSelf)
@@ -65,6 +64,7 @@ public class PlayerManager
 				MyPlayer myPlayer = go.AddComponent<MyPlayer>();
 				_myPlayer = myPlayer;
 				_myPlayer.PlayerId = p.playerId;
+				_myPlayer.TeamId = p.teamId;
 				_players.Add(_myPlayer.PlayerId, _myPlayer); 
 				//_myPlayer.TranslatePlayer(p.position, p.moveDir, p.destPoint);
 			} 
@@ -72,7 +72,8 @@ public class PlayerManager
 			{
 				Player player = go.AddComponent<Player>();
 				//player.TranslatePlayer(p.position, p.moveDir, p.destPoint);
-				player.PlayerId = p.playerId; 
+				player.TeamId = p.teamId;
+				player.PlayerId = p.playerId;
 				_players.Add(p.playerId, player); 
 			}
 		} 
@@ -106,7 +107,7 @@ public class PlayerManager
 		_uiManager.UpdateChatingText(packet.playerName, packet.ChatText); 
 	}
 
-	public void RequestAttack(S_BroadcastAttackRequset packet)
+	public void RequestAttack(S_BroadcastAttack packet)
 	{
 		Player player;
 		if (_players.TryGetValue(packet.playerId, out player))
@@ -115,5 +116,38 @@ public class PlayerManager
 		}
 		
 	}
+	public void Fire(S_BroadcastFireObjIdx packet)
+	{
+		Player player;
+		if (_players.TryGetValue(packet.requestedPlayerId, out player))
+		{ 
+
+			player.Fire(packet.fireObjId);
+		}
+
+	}
+	public void Damage(S_BroadcastDamage packet)
+	{
+		
+		FireManager fm = _sceneManager.GetFireObj(packet.FireObjId).GetComponent<FireManager>();
+
+		Player attacker = null;
+		Player damagedPlayer = null;
+		_players.TryGetValue(packet.attackedPlayerId, out attacker);
+		_players.TryGetValue(packet.damagedPlayerId, out damagedPlayer);
+
+		if (attacker != null) 
+		{
+			fm.OnHit(attacker, damagedPlayer);
+		}
+		 
+
+	} 
+	public void UpdateScore(S_BroadcastUpdateScore packet)
+	{
+		_sceneManager._uiManger._scoreManager.UpdateScore(packet.teamID);
+
+	}
+		
 }
  

@@ -28,10 +28,11 @@ public class NetworkManager : MonoBehaviour
 		Console.WriteLine("===========Client===============");
 		string host = Dns.GetHostName();
 		IPHostEntry ipHost = Dns.GetHostEntry(host);
+		string Ip6Address = "192.168.219.101";
 		//string Ip6Address = "192.168.219.100";
-		 
-		//IPAddress ipAddr = IPAddress.Parse(Ip6Address); 
-		IPAddress ipAddr = ipHost.AddressList[0];
+
+		IPAddress ipAddr = IPAddress.Parse(Ip6Address);  
+		//IPAddress ipAddr = ipHost.AddressList[0];
 		 
 		IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 		 

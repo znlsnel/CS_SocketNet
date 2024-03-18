@@ -36,9 +36,9 @@ public class RespawnUI : MonoBehaviour
 		_baseCanvas.enabled = true;
 		_resapwnUIText.text = $"{respawnInitCount}";
 		_respawnUIAnim.Play("RespawnCountUIAnim");
-		respawnCount = respawnInitCount;
+		respawnCount = respawnInitCount; 
 	}
-
+	 
 	void OnRespawn() 
 	{
 		_baseCanvas.enabled = false;
@@ -55,9 +55,9 @@ public class RespawnUI : MonoBehaviour
 
 		if (timer > 1.0f)
 		{
-			_resapwnUIText.text = $"{respawnCount--}";
+			_resapwnUIText.text = $"{--respawnCount}";
 			_respawnUIAnim.Play("RespawnCountUIAnim");
-			timer = 0.0f;
+			timer = 0.0f; 
 		}
 
 		if (respawnCount == 0)

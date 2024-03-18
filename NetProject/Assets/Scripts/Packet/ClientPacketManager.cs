@@ -39,16 +39,20 @@ public class PacketManager
 			_handler.Add((ushort)PacketId.S_BroadcastEnterGame, PacketHandler.S_BroadcastEnterGameHandler); 
 
 
-			_makeFunc.Add((ushort)PacketId.S_BroadcastAttackRequset, MakePacket<S_BroadcastAttackRequset>); 
-			_handler.Add((ushort)PacketId.S_BroadcastAttackRequset, PacketHandler.S_BroadcastAttackRequsetHandler); 
+			_makeFunc.Add((ushort)PacketId.S_BroadcastFireObjIdx, MakePacket<S_BroadcastFireObjIdx>); 
+			_handler.Add((ushort)PacketId.S_BroadcastFireObjIdx, PacketHandler.S_BroadcastFireObjIdxHandler); 
+
+
+			_makeFunc.Add((ushort)PacketId.S_BroadcastAttack, MakePacket<S_BroadcastAttack>); 
+			_handler.Add((ushort)PacketId.S_BroadcastAttack, PacketHandler.S_BroadcastAttackHandler); 
 
 
 			_makeFunc.Add((ushort)PacketId.S_BroadcastDamage, MakePacket<S_BroadcastDamage>); 
 			_handler.Add((ushort)PacketId.S_BroadcastDamage, PacketHandler.S_BroadcastDamageHandler); 
 
 
-			_makeFunc.Add((ushort)PacketId.S_BroadcastScoreUpdate, MakePacket<S_BroadcastScoreUpdate>); 
-			_handler.Add((ushort)PacketId.S_BroadcastScoreUpdate, PacketHandler.S_BroadcastScoreUpdateHandler); 
+			_makeFunc.Add((ushort)PacketId.S_BroadcastUpdateScore, MakePacket<S_BroadcastUpdateScore>); 
+			_handler.Add((ushort)PacketId.S_BroadcastUpdateScore, PacketHandler.S_BroadcastUpdateScoreHandler); 
 
 
 			_makeFunc.Add((ushort)PacketId.S_BroadcastChat, MakePacket<S_BroadcastChat>); 

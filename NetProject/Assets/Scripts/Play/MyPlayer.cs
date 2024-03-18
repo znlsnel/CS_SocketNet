@@ -13,7 +13,8 @@ public class MyPlayer : Player
 	bool _isAttackable = true;
 
 	// Start is called before the first frame update 
-	NetworkManager _network;
+	public bool isSetName = false; 
+	public NetworkManager _network;
 	private void Awake()
 	{
 		InitCtrl();
@@ -25,12 +26,17 @@ public class MyPlayer : Player
 	}
 	void Start()
 	{
-		
+		handTransform = _animCtrl._animator.GetBoneTransform(HumanBodyBones.RightHand);
+		_scene._uiManger.player = this;
+		 
 	}
 
 	// Update is called once per frame 
 	void Update()
 	{
+		if (isSetName == false)
+			return;
+
 		Vector3 moveDir;
 		Vector3 lookPoint;
 
@@ -50,6 +56,8 @@ public class MyPlayer : Player
 
 	void FixedUpdate()
 	{
+		if (isSetName == false)
+			return; 
 		UpdatePosition();
 	}
 
@@ -74,7 +82,7 @@ public class MyPlayer : Player
 		if (Input.GetAxis("Fire1") <= 0)
 			return;
 		_isAttackable = false;
-		C_AttackRequset chat = new C_AttackRequset();
+		C_AttackRequest chat = new C_AttackRequest();
 		chat.playerId = PlayerId;
 		_network.Send(chat.Write());
 

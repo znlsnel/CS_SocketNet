@@ -22,7 +22,7 @@ class PacketHandler
 		room.Push(() => room.Leave(clientSession));
 	}
 
-	public static void C_AttackRequsetHandler(PacketSession session, IPacket packet)
+	public static void C_AttackRequestHandler(PacketSession session, IPacket packet)
 	{
 		ClientSession clientSession = session as ClientSession;
 		if (clientSession.Room == null)
@@ -32,10 +32,40 @@ class PacketHandler
 		room.Push(() => room.Attack(clientSession));
 	}
 
-	public static void C_DamageHandler(PacketSession session, IPacket packet)
+	public static void C_UpdateScoreRequestHandler(PacketSession session, IPacket packet)
 	{
+		C_UpdateScoreRequest pkt = packet as C_UpdateScoreRequest;
+		ClientSession clientSession = session as ClientSession;
+		if (clientSession.Room == null || pkt == null)
+			return; 
+
+		GameRoom room = clientSession.Room;
+		room.Push(() => room.UpdateScore(pkt));
+	} 
+
+
+	public static void C_DamageRequestHandler(PacketSession session, IPacket packet)
+	{
+		C_DamageRequest pkt = packet as C_DamageRequest;
+		ClientSession clientSession = session as ClientSession;
+		if (clientSession.Room == null || pkt == null)
+			return;
+
+		GameRoom room = clientSession.Room;
+		room.Push(() => room.Damage(pkt));  
+	}
+	public static void C_FireObjIdxRequestHandler(PacketSession session, IPacket packet)
+	{
+		C_FireObjIdxRequest pkt = packet as C_FireObjIdxRequest;
+		ClientSession clientSession = session as ClientSession;
+		if (clientSession.Room == null || pkt == null)
+			return;
+		 
+		GameRoom room = clientSession.Room;
+		room.Push(() => room.FireObjIdx(pkt));
 
 	}
+	
 	public static void C_ChatHandler(PacketSession session, IPacket packet)
 	{
 		C_Chat chatPacket = packet as C_Chat;

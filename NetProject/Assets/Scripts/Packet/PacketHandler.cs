@@ -18,17 +18,43 @@ class PacketHandler
 
 		PlayerManager.Instnace.EnterGame(pkt); 
 	}
+
+	public static void S_BroadcastFireObjIdxHandler(PacketSession session, IPacket packet)
+	{
+		S_BroadcastFireObjIdx pkt = packet as S_BroadcastFireObjIdx;
+		ServerSession serverSession = session as ServerSession;
+
+		if (pkt == null || serverSession == null)
+			return;
+
+		PlayerManager.Instnace.Fire(pkt);
+	}
+
 	public static void S_BroadcastDamageHandler(PacketSession session, IPacket packet)
 	{
+		S_BroadcastDamage pkt = packet as S_BroadcastDamage;
+		ServerSession serverSession = session as ServerSession;
+
+		if (pkt == null || serverSession == null)
+			return;
+
+		PlayerManager.Instnace.Damage(pkt);
 	}
 
-	public static void S_BroadcastScoreUpdateHandler(PacketSession session, IPacket packet)
+	public static void S_BroadcastUpdateScoreHandler(PacketSession session, IPacket packet)
 	{
+		S_BroadcastUpdateScore pkt = packet as S_BroadcastUpdateScore;
+		ServerSession serverSession = session as ServerSession;
+
+		if (pkt == null || serverSession == null)
+			return;
+
+		PlayerManager.Instnace.UpdateScore(pkt);
 	}
 
-	public static void S_BroadcastAttackRequsetHandler(PacketSession session, IPacket packet)
+	public static void S_BroadcastAttackHandler(PacketSession session, IPacket packet)
 	{
-		S_BroadcastAttackRequset pkt = packet as S_BroadcastAttackRequset;
+		S_BroadcastAttack pkt = packet as S_BroadcastAttack;
 		ServerSession serverSession = session as ServerSession;
 
 		PlayerManager.Instnace.RequestAttack(pkt);

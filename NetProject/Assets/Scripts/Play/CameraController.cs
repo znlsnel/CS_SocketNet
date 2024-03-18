@@ -32,16 +32,17 @@ public class CameraController : MonoBehaviour
 		Vector3 nextCameraPos = _player.transform.position + cameraArmPos;
 		transform.position = nextCameraPos;
 		//Vector3 moveDIr = nextCameraPos - transform.position;
-		//float moveDirLength = moveDIr.magnitude;
-
-		//if (moveDirLength < 0.5f)
+		//float moveDirLength = moveDIr.magnitude; 
+		 
+		//if (moveDirLength < 0.1f) 
 		//	return;
 
 		//moveDIr.Normalize();
 
 		//float speed = cameraSpeed;
 		//if (moveDirLength > maxDistance)
-		//	speed = cameraSpeed + (moveDirLength - maxDistance) * 3;
+		//	speed = 5.0f;  
+		//	//speed = cameraSpeed + (moveDirLength - maxDistance) * 3;
 
 		//transform.Translate(moveDIr * Time.deltaTime * speed, Space.World);
 

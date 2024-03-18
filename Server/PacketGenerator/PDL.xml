@@ -3,9 +3,19 @@
 <PDL>
 	<packet name ="S_BroadcastEnterGame">
 		<int name ="playerId"/>
+		<int name ="teamId"/>
 		<vector3 name ="position"/>
 		<vector3 name ="moveDir"/>
 		<vector3 name ="destPoint"/>
+	</packet>
+
+	<packet name ="C_FireObjIdxRequest">
+		<int name ="requestedPlayerId"/>
+	</packet> 
+
+	<packet name ="S_BroadcastFireObjIdx">
+		<int name ="requestedPlayerId"/>
+		<int name ="fireObjId"/>
 	</packet>
 
 	<packet name ="C_Chat">
@@ -13,28 +23,32 @@
 		<string name ="ChatText"/>
 	</packet>
  
-	<packet name ="C_AttackRequset">
+	<packet name ="C_AttackRequest">
 		<int name ="playerId"/>
 	</packet>
 	
-	<packet name ="S_BroadcastAttackRequset">
+	<packet name ="S_BroadcastAttack"> 
 		<int name ="playerId"/>
 	</packet>
 		 
-	<packet name ="C_Damage">
+	<packet name ="C_DamageRequest">
 		<int name ="attackedPlayerId"/>
 		<int name ="damagedPlayerId"/>
+		<int name ="FireObjId"/>
 	</packet>
 		
 	<packet name ="S_BroadcastDamage">
 		<int name ="attackedPlayerId"/>
 		<int name ="damagedPlayerId"/>
+		<int name ="FireObjId"/> 
 	</packet>
 	
-	<packet name ="S_BroadcastScoreUpdate">
-		<int name ="team1Score"/>
-		<int name ="team2Score"/> 
-		<int name ="team3Score"/>
+	<packet name ="C_UpdateScoreRequest">
+		<int name ="teamID"/>
+	</packet> 
+	
+	<packet name ="S_BroadcastUpdateScore">
+		<int name ="teamID"/> 
 	</packet>
 	
 		
@@ -52,6 +66,7 @@
 		<list name ="player">  
 			<bool name ="isSelf"/> 
 			<int name ="playerId"/>
+			<int name ="teamId"/>
 			<vector3 name ="position"/>
 			<vector3 name ="moveDir"/>
 			<vector3 name ="destPoint"/>

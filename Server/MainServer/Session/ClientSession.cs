@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 public class ClientSession : PacketSession
 {
 public int SessionId { get; set; }
+        public int TeamId { get; set; }
 public GameRoom Room { get; set; }
 public vector3 position { get; set; } = new vector3();
 public vector3 moveDir { get; set; } = new vector3();

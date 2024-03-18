@@ -35,16 +35,24 @@ public class PacketManager
 	public void Register()
 	{
 		
+			_makeFunc.Add((ushort)PacketId.C_FireObjIdxRequest, MakePacket<C_FireObjIdxRequest>); 
+			_handler.Add((ushort)PacketId.C_FireObjIdxRequest, PacketHandler.C_FireObjIdxRequestHandler); 
+
+
 			_makeFunc.Add((ushort)PacketId.C_Chat, MakePacket<C_Chat>); 
 			_handler.Add((ushort)PacketId.C_Chat, PacketHandler.C_ChatHandler); 
 
 
-			_makeFunc.Add((ushort)PacketId.C_AttackRequset, MakePacket<C_AttackRequset>); 
-			_handler.Add((ushort)PacketId.C_AttackRequset, PacketHandler.C_AttackRequsetHandler); 
+			_makeFunc.Add((ushort)PacketId.C_AttackRequest, MakePacket<C_AttackRequest>); 
+			_handler.Add((ushort)PacketId.C_AttackRequest, PacketHandler.C_AttackRequestHandler); 
 
 
-			_makeFunc.Add((ushort)PacketId.C_Damage, MakePacket<C_Damage>); 
-			_handler.Add((ushort)PacketId.C_Damage, PacketHandler.C_DamageHandler); 
+			_makeFunc.Add((ushort)PacketId.C_DamageRequest, MakePacket<C_DamageRequest>); 
+			_handler.Add((ushort)PacketId.C_DamageRequest, PacketHandler.C_DamageRequestHandler); 
+
+
+			_makeFunc.Add((ushort)PacketId.C_UpdateScoreRequest, MakePacket<C_UpdateScoreRequest>); 
+			_handler.Add((ushort)PacketId.C_UpdateScoreRequest, PacketHandler.C_UpdateScoreRequestHandler); 
 
 
 			_makeFunc.Add((ushort)PacketId.C_LeaveGame, MakePacket<C_LeaveGame>); 
