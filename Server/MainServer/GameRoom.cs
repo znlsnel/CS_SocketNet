@@ -15,7 +15,7 @@ public class GameRoom : IJobQueue
 	List<ClientSession> _teamBlue = new List<ClientSession>();
 	 
 	JobQueue _jobQueue = new JobQueue();
-	List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
+	List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>(); 
 	
 	
 	public void Push(Action job) 
@@ -28,7 +28,6 @@ public class GameRoom : IJobQueue
 		foreach (ClientSession s in _sessions)
 			s.Send(_pendingList);
 		 
-	//	Console.WriteLine($"Flushed [{_pendingList.Count}] items");
 		_pendingList.Clear();
 	}
 
@@ -65,7 +64,6 @@ public class GameRoom : IJobQueue
 
 		session.Room = this;
 			
-		// 신입생한테 모든 플레이어 목록 전송
 		S_PlayerList players = new S_PlayerList();
 		foreach(ClientSession s in _sessions)
 		{
@@ -81,7 +79,6 @@ public class GameRoom : IJobQueue
 		}
 			 
 		session.Send(players.Write()); 
-		// 신입생 입장을 모두에게 알림
 
 		S_BroadcastEnterGame enter = new S_BroadcastEnterGame();
 		enter.playerId = session.SessionId;
@@ -137,13 +134,13 @@ public class GameRoom : IJobQueue
 	public void Damage(C_DamageRequest packet) 
 	{
 		S_BroadcastDamage s = new S_BroadcastDamage();
-		s.attackedPlayerId = packet.attackedPlayerId;
+		s.attackedPlayerId = packet.attackedPlayerId; 
 		s.damagedPlayerId = packet.damagedPlayerId;
 		s.FireObjId = packet.FireObjId; 
 		Broadcast(s.Write());
 	}
 
-	static int fireObjId = 0;
+	static int fireObjId = 0; 
 	public void FireObjIdx(C_FireObjIdxRequest packet)
 	{ 
 		S_BroadcastFireObjIdx s = new S_BroadcastFireObjIdx();

@@ -51,17 +51,18 @@
 		<int name ="teamID"/> 
 	</packet>
 	
-		
 	<packet name ="S_BroadcastChat">
 		<string name ="playerName"/>
 		<string name ="ChatText"/>
 	</packet>
-
+	
 	<packet name="C_LeaveGame">
 	</packet>
+	
 	<packet name="S_BroadcastLeaveGame">
 		<int name ="playerId"/>
 	</packet>
+	
 	<packet name ="S_PlayerList">
 		<list name ="player">  
 			<bool name ="isSelf"/> 
@@ -72,11 +73,14 @@
 			<vector3 name ="destPoint"/>
 		</list> 
 	</packet>
+	
+	
 	<packet name ="C_Move">
 		<vector3 name ="position"/>
 		<vector3 name ="moveDir"/>
 		<vector3 name ="destPoint"/>
 	</packet>
+	
 	<packet name ="S_BroadcastMove">
 		<int name ="playerId"/>
 		<vector3 name ="position"/>

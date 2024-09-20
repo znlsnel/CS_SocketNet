@@ -21,28 +21,15 @@ class Program
 	{ 
 		Console.WriteLine("===========Server===============");
 
-		// DNS  (Domain Name System)
-		// 172.1.2.3 이러한 IP 주소를 www.naver.com 과 같은 형태로 바꿔줌
-		string host = Dns.GetHostName();
-		string Ip6Address = "192.168.219.101";
-		 
+		string Ip6Address = "192.168.219.101"; 
+		  
 		IPAddress ipAddr = IPAddress.Parse(Ip6Address); 
-		//IPHostEntry ipHost = Dns.GetHostEntry(host);
-		//IPAddress ipAddr =  ipHost.AddressList[0];
-		 
-		//IPAddress ipAddr = IPAddress.Parse(IpAddressPC);
-		IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+		IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777); 
 			 
 		_listener.Init(endPoint, () =>{ return SessionManager.Instance.Generate(); });
 
-
-		 
 		JobTimer.Instance.Push(FlushRoom);
 		while (true)
-		{
 			JobTimer.Instance.Flush();
-		}
-
 	}
-
 }

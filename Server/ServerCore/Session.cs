@@ -30,6 +30,7 @@ namespace ServerCore
 				ushort dataSize = 	BitConverter.ToUInt16(buffer.Array, buffer.Offset);
 				if (buffer.Count < dataSize)
 					break;
+
 				packetCount++;
 				// 여기까지 왔으면 패킷 조립 가능
 				OnRecvPacket(new ArraySegment<byte>(buffer.Array, buffer.Offset, dataSize));
@@ -37,7 +38,7 @@ namespace ServerCore
 				processLen += dataSize;
 				buffer = new ArraySegment<byte>(buffer.Array, buffer.Offset + dataSize, buffer.Count - dataSize);
 			}
-			 
+			  
 			//if (packetCount > 1)
 			//	Console.WriteLine($"패킷 모아보내기 :{packetCount}");
 
@@ -98,10 +99,9 @@ namespace ServerCore
 				_sendQueue.Enqueue(data); 
 				if (_pendingList.Count == 0)
 					RegisterSend();
-				
-                
 			}
 		} 
+
 		public void Send(List<ArraySegment<byte>> datas)
 		{
 			if (datas.Count == 0) return;
@@ -147,7 +147,10 @@ namespace ServerCore
 					OnRecvCompleted(null, _recvArgs);
 				}
 			} 
-			catch (SocketException e) { Console.WriteLine(e); } 
+			catch (SocketException e) 
+			{ 
+				Console.WriteLine(e); 
+			} 
 		}
 
 		void RegisterSend()

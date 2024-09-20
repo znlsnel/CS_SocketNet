@@ -65,7 +65,7 @@ class PacketHandler
 		room.Push(() => room.FireObjIdx(pkt));
 
 	}
-	
+
 	public static void C_ChatHandler(PacketSession session, IPacket packet)
 	{
 		C_Chat chatPacket = packet as C_Chat;
@@ -73,13 +73,11 @@ class PacketHandler
 
 		if (clientSession.Room == null || chatPacket == null)
 			return;
-		 
+
 		GameRoom room = clientSession.Room;
-		room.Push(() => room.Chating(chatPacket)); 
-		 
-
-
+		room.Push(() => room.Chating(chatPacket));
 	}
+
 	public static void C_MoveHandler(PacketSession session, IPacket packet)
 	{
 		C_Move movePacket = packet as C_Move;

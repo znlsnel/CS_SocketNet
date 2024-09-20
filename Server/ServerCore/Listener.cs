@@ -15,8 +15,8 @@ namespace ServerCore
 
 		public void Init(IPEndPoint endPoint, Func<Session> seesionFactory, int register =  10, int backLog = 50) 
 		{
-			_sessionFactory += seesionFactory;  
-
+			_sessionFactory = seesionFactory;  
+			 
 			_listenSocket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 			_listenSocket.Bind(endPoint);
 			_listenSocket.Listen(backLog); 
@@ -29,8 +29,6 @@ namespace ServerCore
 			}
 		}   
 		
-		public Session GetSession() { return _sessionFactory.Invoke(); }
-
 		void RegisterAccept(SocketAsyncEventArgs args)
 		{
 			args.AcceptSocket = null;
@@ -47,7 +45,7 @@ namespace ServerCore
 			{
 				Session session = _sessionFactory.Invoke();
 				session.Start(args.AcceptSocket);
-				session.OnConnected(args.AcceptSocket.RemoteEndPoint);
+				session.OnConnected(args.AcceptSocket.RemoteEndPoint); 
 			}  
 			else
 			{
@@ -56,10 +54,5 @@ namespace ServerCore
 			RegisterAccept(args);
 		}
 
-		public Socket Accept()
-		{
-
-			return _listenSocket.Accept();
-		}
 	}
 }

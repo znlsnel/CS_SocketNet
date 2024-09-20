@@ -13,33 +13,28 @@ public class NetworkManager : MonoBehaviour
 {
 	ServerSession _session = new ServerSession();
 
-	private void Awake()
-	{
+	public string ipAddress = "192.168.219.101"; // 기본값 설정
+	public int port = 7777; // 기본 포트 설정
 
-	}
 	public void Send(ArraySegment<byte> data)
 	{
 		_session.Send(data);
 	}
-	 
+	  
 	  
     void Start() 
-    { 
-		//Console.WriteLine("===========Client===============");
-		//string host = Dns.GetHostName();
-		 
-		//IPHostEntry ipHost = Dns.GetHostEntry(host);
-		//string Ip6Address = "192.168.219.100";
-		//IPAddress ipAddr = ipHost.AddressList[0];
+    {
+		IPAddress[] addresses = Dns.GetHostAddresses(ipAddress);
+		if (addresses.Length == 0)
+		{
+			Debug.LogError("Invalid IP address");
+			return;
+		} 
 
-		string IpAddress = "192.168.219.101";  
-		 
-		IPAddress ipAddr = IPAddress.Parse(IpAddress);  
-		 
-		IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
-		 
+		IPAddress ipAddr = addresses[0]; // 첫 번째 IP 주소 사용
+		IPEndPoint endPoint = new IPEndPoint(ipAddr, port);
 		Connector connector = new Connector();
-		 
+
 		connector.Connect(endPoint, () => { return _session; }, 1);
 	} 
 	 
