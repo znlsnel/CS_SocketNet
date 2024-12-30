@@ -1,5 +1,7 @@
 ![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=30&pause=1000&width=435&lines=C%23+Server)
+
 ---
+
 # Description
 - **프로젝트 소개** <br>
   게임 서버를 직접 만들고 게임에 적용시켜보기 위해서 시작한 프로젝트입니다.<br>
@@ -52,11 +54,21 @@
 - 데이터 전송 횟수를 줄이기 위해 데이터를 모아서 보내는 방식을 채택했습니다.
 - 모든 클라이언트에게 보낼 패킷을 모아두었다가 특정 주기로 한번에 보내도록 하여 전송 횟수를 획기적으로 줄일 수 있었습니다.
 
-<br><br>
+<br>
+
+---
 
 ## 핵심 기능
-- 플레이어 정보 동기화
-- 투사체 정보 동기화
-- 스코어 동기화
+플레이 영상입니다. (아래 이미지를 클릭하면 영상 링크로 이동합니다.)
+[![Video](https://img.youtube.com/vi/KqOvVzq0ZdU/0.jpg)](https://www.youtube.com/watch?time_continue=21&v=lpBEm4esF6Y&embeds_referring_euri=https%3A%2F%2Fwww.notion.so%2F&source_ve_path=MjM4NTE)
+- 플레이어 정보 동기화<br>
+  플레이어의 위치, 회전 값, 체력, 플레이어 상태를 동기화 하였습니다.
+
+- 투사체 정보 동기화<br>
+  투사체 생성 여부, 위치값, 충돌 여부를 동기화했습니다.
+
+- 스코어 동기화<br>
+  각 팀의 점수를 동기화 하였습니다.
+  
 
   
